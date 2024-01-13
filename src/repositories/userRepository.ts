@@ -34,14 +34,8 @@ async function getUserList(pag: number): Promise<User[]> {
 
 async function registerUser(userParams: User): Promise<User> {
   return new Promise((resolve, reject) => {
-    if (!userParams.name || !userParams.email || !userParams.password)
-      return reject(
-        new Error(`Usuário inválido, informe todos os dados obrigatórios`)
-          .message
-      );
-
     if (users.some((user) => userParams.email === user.email))
-      return reject(new Error(`E-mail já possui cadastro`).message);
+      return reject(new Error(`E-mail já cadastrado`).message);
 
     const newUser = new User(
       userParams.name,
