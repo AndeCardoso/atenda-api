@@ -1,52 +1,48 @@
-import User from "../models/User";
+import { Model } from "sequelize";
+import { IUserModel, User } from "../models/User";
 
-const users: User[] = [];
+export type TOrderType = "ASC" | "DESC";
 
-async function getUserById(id: number): Promise<User | undefined> {
-  return new Promise((resolve, reject) => {
-    return resolve(users.find((c) => c.id === id));
-  });
+interface IUserPost {
+  page: number;
+  limit: number;
+  order: TOrderType;
 }
 
-async function getUserList(pag: number): Promise<User[]> {
-  return new Promise((resolve, reject) => {
-    const orderedList = users.sort((a, b) => a.name.localeCompare(b.name));
+const getUserById = async (
+  id: number
+): Promise<Model<IUserModel, IUserModel> | null> => {
+  const user = await User.findByPk<Model<IUserModel>>(id);
+  if (user) {
+    return user;
+  }
+  return null;
+};
 
-    if (users.length === 0) {
-      return resolve([]);
-    }
-
-    if (users.length < 20) {
-      return resolve(orderedList);
-    }
-
-    const indexEnd = pag * 20;
-    const indexStart = indexEnd - 20;
-
-    if (indexStart > users.length) {
-      return resolve([]);
-    }
-    const userList = orderedList.slice(indexStart, indexEnd);
-
-    return resolve(userList);
+const getUserList = async ({
+  page = 1,
+  limit = 20,
+  order = "ASC",
+}: IUserPost): Promise<Model<IUserModel>[]> => {
+  const offset = (page - 1) * limit;
+  const users = await User.findAll({
+    offset,
+    limit,
+    order: [["name", order]],
   });
-}
+  return users;
+};
 
-async function registerUser(userParams: User): Promise<User> {
-  return new Promise((resolve, reject) => {
-    if (users.some((user) => userParams.email === user.email))
-      return reject(new Error(`E-mail já cadastrado`).message);
-
-    const newUser = new User(
-      userParams.name,
-      userParams.email,
-      userParams.password
-    );
-    users.push(newUser);
-
-    return resolve(newUser);
+const registerUser = async (
+  userParams: IUserModel
+): Promise<Model<IUserModel>> => {
+  const result = await User.create<Model<IUserModel>>({
+    name: userParams.name,
+    email: userParams.email,
+    password: userParams.password,
   });
-}
+  return result;
+};
 
 export default {
   getUserById,
