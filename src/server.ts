@@ -1,8 +1,12 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import { app } from "./app";
-dotenv.config();
+import { sequelize } from "./db";
 
-const port = 8888;
+const port = process.env.PORT;
+
+(async () => {
+  await sequelize.sync();
+})();
 
 app.listen(port, () => {
   console.log(`Atenda is working at port: ${port}`);

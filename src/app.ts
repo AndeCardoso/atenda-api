@@ -15,10 +15,10 @@ app.use(express.json());
 
 app.use("/user/", userRouter);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((_req: Request, res: Response) => {
   res.send("Wellcome to server!");
 });
 
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((error: Error, _req: Request, res: Response) => {
   res.status(500).send(error.message);
 });

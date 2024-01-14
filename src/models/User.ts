@@ -1,17 +1,36 @@
-export default class User {
-  id: number;
+import Sequelize from "sequelize";
+import { sequelize } from "../db";
+
+export interface IUserModel {
+  id?: number;
   name: string;
   password: string;
   email: string;
   token?: string;
-
-  private static nextId = 1;
-
-  constructor(name: string, email: string, password: string, token?: string) {
-    this.id = User.nextId++;
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.token = token;
-  }
 }
+
+export const User = sequelize.define("user", {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  token: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+});

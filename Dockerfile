@@ -10,6 +10,4 @@ COPY . /src/
 
 EXPOSE 8888
 
-ENV NODE_ENV=development
-
 CMD ["npx", "nodemon", "src/server.ts"]
