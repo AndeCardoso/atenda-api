@@ -5,6 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import userRouter from "./routers/userRouters";
+import authRouter from "./routers/authRouters";
 
 export const app: Application = express();
 
@@ -14,11 +15,12 @@ app.use(helmet());
 app.use(express.json());
 
 app.use("/user/", userRouter);
+app.use("/sign-in/", authRouter);
 
-app.use((_req: Request, res: Response) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.send("Wellcome to server!");
 });
 
-app.use((error: Error, _req: Request, res: Response) => {
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
   res.status(500).send(error.message);
 });
