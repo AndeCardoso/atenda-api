@@ -2,16 +2,15 @@ import { Request, Response, NextFunction, json } from "express";
 import userRepository, { TOrderType } from "../repositories/userRepository";
 import { validationResult } from "express-validator";
 import { IUserModel } from "src/models/User";
-import { SequelizeScopeError } from "sequelize";
 
-async function getUserById(req: Request, res: Response, next: NextFunction) {
+async function getUserById(req: Request, res: Response) {
   const id = req.params.id;
   const user = await userRepository.getUserById(parseInt(id));
   if (user) res.json(user);
-  else res.sendStatus(404);
+  else res.status(404);
 }
 
-async function getUserList(req: Request, res: Response, next: NextFunction) {
+async function getUserList(req: Request, res: Response) {
   const { page, limit, order } = req.query;
 
   const users = await userRepository.getUserList({
@@ -23,15 +22,15 @@ async function getUserList(req: Request, res: Response, next: NextFunction) {
   if (users) {
     res.json(users);
   } else {
-    res.sendStatus(404);
+    res.status(404);
   }
 }
 
-async function postUser(req: Request, res: Response, next: NextFunction) {
+async function postUser(req: Request, res: Response) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    res.status(403).json(errors);
+    res.status(400).json(errors);
     return;
   }
 
@@ -41,7 +40,7 @@ async function postUser(req: Request, res: Response, next: NextFunction) {
     if (result) res.status(201).json(result);
     else res.status(400);
   } catch (error: any) {
-    res.status(403).json({ errorMessage: error.original.detail });
+    res.status(400).json({ errorMessage: error.original.detail });
   }
 }
 
