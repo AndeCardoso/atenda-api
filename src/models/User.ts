@@ -6,7 +6,7 @@ export interface IUserModel {
   name: string;
   password: string;
   email: string;
-  token?: string;
+  recoverToken?: string;
 }
 
 export const User = sequelize.define("user", {
@@ -29,7 +29,7 @@ export const User = sequelize.define("user", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  token: {
+  recoverToken: {
     type: Sequelize.STRING,
     allowNull: true,
   },
