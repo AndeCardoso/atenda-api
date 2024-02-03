@@ -7,8 +7,11 @@ export class AuthController {
 
     const authUseCase = new AuthUseCase();
 
-    const result = await authUseCase.execute({ email, password });
-
-    return res.status(200).json(result);
+    try {
+      const result = await authUseCase.execute({ email, password });
+      return res.status(200).json(result);
+    } catch (e) {
+      res.status(400).json(e);
+    }
   }
 }

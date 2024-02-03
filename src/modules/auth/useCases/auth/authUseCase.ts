@@ -2,11 +2,11 @@ import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
 import { AppError } from "@errors/AppErrors";
-import { AuthRequestDTO } from "@modules/auth/dtos/AuthRequestDTO";
-import { AuthResponseDTO } from "@modules/auth/dtos/AuthResponseDTO";
+import { AuthRequestDTO } from "@modules/auth/dtos/auth/AuthRequestDTO";
+import { AuthResponseDTO } from "@modules/auth/dtos/auth/AuthResponseDTO";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
-const expireTime = process.env.EXPIRE_TIME as jwt.Secret;
+const accessExpireTime = process.env.ACCESS_EXPIRE_TIME as jwt.Secret;
 
 export class AuthUseCase {
   async execute({ email, password }: AuthRequestDTO): Promise<AuthResponseDTO> {
@@ -18,12 +18,12 @@ export class AuthUseCase {
     });
 
     if (!checkUserExistence) {
-      throw new AppError("Email or password invalid");
+      throw new AppError("E-mail ou senha inválida");
     }
 
     const userId = email;
     const token = jwt.sign({ userId }, secretKey, {
-      expiresIn: `${expireTime}`,
+      expiresIn: `${accessExpireTime}`,
     });
 
     const response = {
