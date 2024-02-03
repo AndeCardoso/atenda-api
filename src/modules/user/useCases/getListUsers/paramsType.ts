@@ -12,4 +12,4 @@ export enum orderEnum {
   DESC = "desc",
 }
 
-export type TColumnTypes = "id" | "name" | "email";
+export type TColumnTypes = "id" | "name" | "email" | "updated_at";

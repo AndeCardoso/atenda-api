@@ -18,7 +18,7 @@ export class GetListUsersController {
         page: Number(page),
         limit: Number(limit),
         order: order || orderEnum.ASC,
-        column: column,
+        column: column || "name",
       });
       return res.status(200).json(result);
     } catch (e) {
