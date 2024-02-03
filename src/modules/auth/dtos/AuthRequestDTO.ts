@@ -1,4 +1,4 @@
-export interface IAuthModel {
+export interface AuthRequestDTO {
   email: string;
   password: string;
 }

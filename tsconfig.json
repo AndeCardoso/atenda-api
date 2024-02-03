@@ -3,14 +3,20 @@
     "target": "es2016",
     "module": "commonjs",
     "rootDir": "./src/",
+    "outDir": "./dist/",
     "moduleResolution": "node",
     "baseUrl": ".",
-    "outDir": "./dist/",
+    "paths": {
+      "@errors/*": ["./src/errors/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@prismaClient/*": ["./src/prismaClient/*"],
+    },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
   },
   "include": ["src/**/*.ts"],
-  "ts-node": { "transpileOnly": true }
+  "ts-node": { "transpileOnly": true, "require": ["tsconfig-paths/register"] }
 }

@@ -1,0 +1,1 @@
+subir docker db: docker-compose up

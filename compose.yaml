@@ -11,6 +11,6 @@ services:
     ports:
       - ${DB_PORT}
     volumes:
-          - atenda_vol:/var/lib/postgresql/data/
+      - atenda_vol:/var/lib/postgresql/data/
 volumes:
     atenda_vol:
