@@ -4,8 +4,9 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
 
-import userRouter from "./routers/userRouters";
-import authRouter from "./routers/authRouters";
+import userRouter from "./modules/user/routers/UserRouters";
+import signInRouter from "./modules/auth/routers/SignInRouters";
+import { AppError } from "./errors/AppErrors";
 
 export const app: Application = express();
 
@@ -15,12 +16,24 @@ app.use(helmet());
 app.use(express.json());
 
 app.use("/user/", userRouter);
-app.use("/sign-in/", authRouter);
+app.use("/sign-in/", signInRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.send("Wellcome to server!");
 });
 
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).send(error.message);
-});
+app.use(
+  (err: Error, request: Request, response: Response, next: NextFunction) => {
+    if (err instanceof AppError) {
+      return response.status(err.statusCode).json({
+        status: "error",
+        message: err.message,
+      });
+    }
+
+    return response.status(500).json({
+      status: "error",
+      message: `Internal server error - ${err.message}`,
+    });
+  }
+);
