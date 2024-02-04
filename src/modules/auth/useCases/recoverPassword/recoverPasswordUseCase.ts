@@ -6,7 +6,7 @@ import { RecoverPasswordResponseDTO } from "@modules/auth/dtos/recoverPassword/R
 import { RecoverPasswordRequestDTO } from "@modules/auth/dtos/recoverPassword/RecoverPasswordRequestDTO";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
-const accessExpireTime = process.env.ACCESS_EXPIRE_TIME as jwt.Secret;
+const accessExpireTime = process.env.ACCESS_EXPIRE_TIME;
 
 export class RecoverPasswordUseCase {
   async execute({
@@ -38,6 +38,7 @@ export class RecoverPasswordUseCase {
       },
       data: {
         password,
+        recoverToken: null,
       },
     });
 

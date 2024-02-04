@@ -13,7 +13,12 @@ export class GetListUsersUseCase {
     const offset = (page - 1) * limit;
 
     const users = await prisma.user.findMany({
-      select: { id: true, name: true, email: true, updated_at: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        updated_at: true,
+      },
       orderBy: { [column]: order },
       take: limit,
       skip: offset,
