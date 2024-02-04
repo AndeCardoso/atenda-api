@@ -8,7 +8,7 @@ import { SendRecoverTokenResponseDTO } from "@modules/auth/dtos/sendRecoverToken
 
 import { sendEmail } from "@services/Nodemailer";
 import { mailConfig } from "@services/Nodemailer/config";
-import { recoverTemplateFile } from "@services/Nodemailer/templates/recoverMail";
+import { generateRecoverTemplateWithData } from "@services/Nodemailer/templates/recoverMail";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 const recoverExpireTime = process.env.RECOVER_EXPIRE_TIME;
@@ -45,13 +45,15 @@ export class SendRecoverTokenUseCase {
       throw new AppError("Erro no processo de recuperação de senha");
     }
 
+    const renderedTemplate = generateRecoverTemplateWithData(recoverToken);
+
     try {
       await sendEmail(
         mailConfig({
           destination: email,
           from: emailUser || "recover@atenda.com",
           subject: "Recuperação de senha - Sistema Atenda",
-          template: recoverTemplateFile,
+          template: renderedTemplate,
         })
       );
     } catch (error) {
