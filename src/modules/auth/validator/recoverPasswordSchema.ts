@@ -1,11 +1,17 @@
 import { checkSchema } from "express-validator";
 
-export const authValidatorSchema = checkSchema({
+export const recoverPasswordSchema = checkSchema({
   email: {
     notEmpty: true,
     optional: false,
     isEmail: true,
     errorMessage: "E-mail inválido!",
+  },
+  token: {
+    notEmpty: true,
+    optional: false,
+    isJWT: true,
+    errorMessage: "Token de segurança inválido",
   },
   password: {
     notEmpty: true,

@@ -1,18 +1,6 @@
 import { checkSchema } from "express-validator";
 
-export const userValidatorSchema = checkSchema({
-  token: {
-    optional: true,
-  },
-  name: {
-    notEmpty: true,
-    optional: false,
-    trim: true,
-    isLength: {
-      options: { min: 4, max: 32 },
-    },
-    errorMessage: "Nome precisa ter de 4 á 32 caracteres!",
-  },
+export const authSchema = checkSchema({
   email: {
     notEmpty: true,
     optional: false,
