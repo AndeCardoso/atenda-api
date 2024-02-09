@@ -1,5 +1,9 @@
 import express from "express";
-import { authValidatorSchema } from "../validator/authValidatorSchema";
+
+import { authSchema } from "../validator/authSchema";
+import { sendRecoverTokenSchema } from "../validator/sendRecoverTokenSchema";
+import { recoverPasswordSchema } from "../validator/recoverPasswordSchema";
+
 import { AuthController } from "../useCases/auth/authController";
 import { SendRecoverTokenController } from "../useCases/sendRecoverToken/sendRecoverTokenController";
 import { RecoverPasswordController } from "../useCases/recoverPassword/recoverPasswordController";
@@ -7,11 +11,19 @@ import { RecoverPasswordController } from "../useCases/recoverPassword/recoverPa
 const AuthRouter = express.Router();
 
 const authController = new AuthController();
-const recoverPasswordController = new RecoverPasswordController();
 const sendRecoverTokenController = new SendRecoverTokenController();
+const recoverPasswordController = new RecoverPasswordController();
 
-AuthRouter.post("/", authValidatorSchema, authController.handle);
-AuthRouter.post("/recover", sendRecoverTokenController.handle);
-AuthRouter.put("/recover", recoverPasswordController.handle);
+AuthRouter.post("/", authSchema, authController.handle);
+AuthRouter.post(
+  "/recover",
+  sendRecoverTokenSchema,
+  sendRecoverTokenController.handle
+);
+AuthRouter.put(
+  "/recover",
+  recoverPasswordSchema,
+  recoverPasswordController.handle
+);
 
 export default AuthRouter;
