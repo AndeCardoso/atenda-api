@@ -12,22 +12,25 @@ export class GetListUsersUseCase {
   }: IGetListUsersParams): Promise<UserResponseDTO[]> {
     const offset = (page - 1) * limit;
 
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        updated_at: true,
-      },
-      orderBy: { [column]: order },
-      take: limit,
-      skip: offset,
-    });
+    try {
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          updated_at: true,
+        },
+        orderBy: { [column]: order },
+        take: limit,
+        skip: offset,
+      });
 
-    if (!users || users.length === 0) {
-      throw new AppError("User list empty", 404);
+      if (users.length === 0) {
+        throw new AppError("Nenhum usuário encontrado", 404);
+      }
+      return users;
+    } catch (error) {
+      throw new AppError("Nenhum usuário encontrado", 404);
     }
-
-    return users;
   }
 }
