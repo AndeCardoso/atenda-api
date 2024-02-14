@@ -25,7 +25,7 @@ const createUserController = new CreateUserController();
  * @swagger
  * /user/list:
  *   get:
- *     description: Lista de usuários
+ *     summary: Lista de usuários
  *     tags: [User]
  *     produces:
  *       - application/json
@@ -76,7 +76,7 @@ userRouter.get("/list", getListUsersSchema, getListUsersController.handle);
  * @swagger
  * /user/{id}:
  *   get:
- *     description: Busca de usuário por Id
+ *     summary: Busca de usuário por Id
  *     tags: [User]
  *     produces:
  *       - application/json

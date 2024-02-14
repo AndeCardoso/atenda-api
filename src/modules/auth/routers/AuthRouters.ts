@@ -25,7 +25,7 @@ const recoverPasswordController = new RecoverPasswordController();
  * @swagger
  * /auth/:
  *   post:
- *     description: Autenticação de acesso
+ *     summary: Autenticação de acesso
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -57,7 +57,7 @@ AuthRouter.post("/", authSchema, authController.handle);
  * @swagger
  * /recover:
  *   post:
- *     description: Pedido para recuperação de senha.
+ *     summary: Pedido para recuperação de senha
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -90,7 +90,7 @@ AuthRouter.post(
  * @swagger
  * /recover:
  *   put:
- *     description: Atualização de senha para recuperação de conta.
+ *     summary: Atualização de senha para recuperação de conta
  *     tags: [Auth]
  *     requestBody:
  *       required: true
