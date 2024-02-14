@@ -1,4 +1,5 @@
 import "dotenv/config";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
 import { AppError } from "@errors/AppErrors";
@@ -7,6 +8,7 @@ import { RecoverPasswordRequestDTO } from "@modules/auth/dtos/recoverPassword/Re
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 const accessExpireTime = process.env.ACCESS_EXPIRE_TIME;
+const saltOrRounds = process.env.CRYPTO_SALT_ROUNDS;
 
 export class RecoverPasswordUseCase {
   async execute({
@@ -29,15 +31,17 @@ export class RecoverPasswordUseCase {
     const checkedToken = token === checkUserExistence?.recoverToken;
 
     if (!checkUserExistence || !checkedToken) {
-      throw new AppError("E-mail ou token de segurança inválido");
+      throw new AppError("E-mail ou token de segurança inválido", 400);
     }
+
+    const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
 
     const result = await prisma.user.update({
       where: {
         email,
       },
       data: {
-        password,
+        password: hashedPassword,
         recoverToken: null,
       },
     });
@@ -51,7 +55,7 @@ export class RecoverPasswordUseCase {
     );
 
     if (!result) {
-      throw new AppError("Erro no processo de recuperação de senha");
+      throw new AppError("Erro no processo de recuperação de senha", 400);
     }
 
     return {

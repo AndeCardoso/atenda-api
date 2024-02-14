@@ -1,4 +1,5 @@
 import "dotenv/config";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
 import { AppError } from "@errors/AppErrors";
@@ -10,15 +11,20 @@ const accessExpireTime = process.env.ACCESS_EXPIRE_TIME as jwt.Secret;
 
 export class AuthUseCase {
   async execute({ email, password }: AuthRequestDTO): Promise<AuthResponseDTO> {
-    const checkUserExistence = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: {
         email,
-        password,
       },
     });
 
-    if (!checkUserExistence) {
-      throw new AppError("E-mail ou senha inválida");
+    if (!user) {
+      throw new AppError("E-mail ou senha inválida", 400);
+    }
+
+    const match = await bcrypt.compare(password, user?.password);
+
+    if (!match) {
+      throw new AppError("E-mail ou senha inválida", 400);
     }
 
     const userId = email;
