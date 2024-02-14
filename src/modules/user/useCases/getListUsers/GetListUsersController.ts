@@ -10,8 +10,8 @@ export class GetListUsersController {
 
     try {
       const result = await getAllUsersUseCase.execute({
-        page: Number(page),
-        limit: Number(limit),
+        page: page ? Number(page) : undefined,
+        limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "name",
       });

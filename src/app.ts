@@ -1,8 +1,12 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 
+import { swaggerOptions } from "./documentation/swaggerOptions";
+
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 import userRouter from "./modules/user/routers/UserRouters";
 import authRouter from "./modules/auth/routers/AuthRouters";
@@ -15,6 +19,9 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/user/", userRouter);
 app.use("/auth/", authRouter);
 
