@@ -1,15 +1,19 @@
 import { AppError } from "@errors/AppErrors";
 import { prisma } from "@prismaClient/client";
-import { UserResponseDTO } from "@modules/user/dtos/UserResponseDTO";
-import { IGetListUsersParams } from "./paramsType";
+import {
+  UserListResponseDTO,
+  UserResponseDTO,
+} from "@modules/user/dtos/UserResponseDTO";
+import { IGetListUsersParams, columnTypesEnum, orderEnum } from "./paramsType";
+import { paginantionResponseMount } from "src/utils/paginantionResponseMount";
 
 export class GetListUsersUseCase {
   async execute({
     page = 1,
     limit = 20,
-    order = "asc",
-    column = "name",
-  }: IGetListUsersParams): Promise<UserResponseDTO[]> {
+    order = orderEnum.ASC,
+    column = columnTypesEnum.NAME,
+  }: IGetListUsersParams): Promise<UserListResponseDTO> {
     const offset = (page - 1) * limit;
 
     try {
@@ -25,10 +29,18 @@ export class GetListUsersUseCase {
         skip: offset,
       });
 
+      const totalUsers = await prisma.user.count();
+
       if (users.length === 0) {
         throw new AppError("Nenhum usuário encontrado", 404);
       }
-      return users;
+
+      return paginantionResponseMount<UserResponseDTO>({
+        data: users,
+        page,
+        limit,
+        totalItems: totalUsers,
+      });
     } catch (error) {
       throw new AppError("Nenhum usuário encontrado", 404);
     }
