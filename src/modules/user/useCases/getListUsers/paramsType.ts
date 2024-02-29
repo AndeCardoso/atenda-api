@@ -13,3 +13,10 @@ export enum orderEnum {
 }
 
 export type TColumnTypes = "id" | "name" | "email" | "updated_at";
+
+export enum columnTypesEnum {
+  ID = "id",
+  NAME = "name",
+  EMAIL = "email",
+  UPDATED_AT = "updated_at",
+}
