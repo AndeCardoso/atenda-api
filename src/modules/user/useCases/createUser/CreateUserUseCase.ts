@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import { prisma } from "@prismaClient/client";
-import { AppError } from "@errors/AppErrors";
 import { CreateUserDTO } from "@modules/user/dtos/CreateUserDTO";
 import { UserResponseDTO } from "@modules/user/dtos/UserResponseDTO";
+import { badRequest, created } from "@helper/http/httpHelper";
+import { HttpResponse } from "@shared/protocols/http";
 
 const saltOrRounds = process.env.CRYPTO_SALT_ROUNDS;
 
@@ -11,7 +12,7 @@ export class CreateUserUseCase {
     name,
     email,
     password,
-  }: CreateUserDTO): Promise<UserResponseDTO> {
+  }: CreateUserDTO): Promise<HttpResponse<UserResponseDTO>> {
     const checkUserExistence = await prisma.user.findUnique({
       where: {
         email,
@@ -19,7 +20,7 @@ export class CreateUserUseCase {
     });
 
     if (Boolean(checkUserExistence)) {
-      throw new AppError("E-mail já cadastrado", 400);
+      return badRequest("E-mail já cadastrado");
     }
 
     const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
@@ -28,11 +29,11 @@ export class CreateUserUseCase {
       data: { name, email, password: hashedPassword },
     });
 
-    return {
+    return created({
       id: user.id,
       name: user.name,
       email: user.email,
       updated_at: user.updated_at,
-    };
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { checkSchema } from "express-validator";
-import { orderEnum } from "../useCases/getListUsers/paramsType";
+import { userColumnArray } from "../useCases/getListUsers/paramsType";
+import { orderEnum } from "@shared/types/pagination.type";
 
 export const getListUsersSchema = checkSchema({
   page: {
@@ -42,7 +43,7 @@ export const getListUsersSchema = checkSchema({
       bail: true,
     },
     isIn: {
-      options: [["id", "name", "email", "updated_at"]],
+      options: [userColumnArray],
       errorMessage:
         "Nome de coluna inválida, escolha entre os campos retornados na lista de usuários",
     },
