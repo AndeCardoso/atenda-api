@@ -4,7 +4,7 @@ import * as jwt from "jsonwebtoken";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 
-export const validarToken = (
+export const tokenValidation = (
   req: Request,
   res: Response,
   next: NextFunction
