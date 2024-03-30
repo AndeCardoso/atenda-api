@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { UpdateTechnicianUseCase } from "./UpdateTechnicianUseCase";
-import { serverError } from "@helper/http/httpHelper";
 import { validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 

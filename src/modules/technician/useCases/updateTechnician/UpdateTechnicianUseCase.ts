@@ -2,12 +2,12 @@ import { contentNotFound, ok } from "@helper/http/httpHelper";
 import { prisma } from "@prismaClient/client";
 import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
 import { HttpResponse } from "@shared/protocols/http";
-import { UpdateTechnicianDTO } from "@modules/technician/dtos/UpdateTechnicianDTO";
+import { CreateTechnicianDTO } from "@modules/technician/dtos/CreateTechnicianDTO";
 
 export class UpdateTechnicianUseCase {
   async execute(
     id: number,
-    data: UpdateTechnicianDTO
+    data: CreateTechnicianDTO
   ): Promise<HttpResponse<TechnicianResponseDTO>> {
     const technician = await prisma.technician.update({
       where: { id },
@@ -22,13 +22,13 @@ export class UpdateTechnicianUseCase {
     const technicianAddress = await prisma.address.update({
       where: { id: technician.addressId },
       data: {
-        street: data?.address?.street,
-        number: data?.address?.number,
-        complement: data?.address?.complement,
-        district: data?.address?.district,
-        cep: data?.address?.cep,
-        state: data?.address?.state,
-        city: data?.address?.city,
+        street: data.address.street,
+        number: data.address.number,
+        complement: data.address.complement,
+        district: data.address.district,
+        cep: data.address.cep,
+        state: data.address.state,
+        city: data.address.city,
       },
     });
 

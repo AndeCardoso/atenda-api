@@ -1,4 +1,4 @@
-import { CreateAddress } from "@shared/types/address.type";
+import { address } from "@shared/types/address.type";
 import {
   technicianPositionEnum,
   technicianStatusEnum,
@@ -10,5 +10,5 @@ export interface CreateTechnicianDTO {
   cpf: string;
   position: technicianPositionEnum;
   status?: technicianStatusEnum;
-  address: CreateAddress;
+  address: address;
 }

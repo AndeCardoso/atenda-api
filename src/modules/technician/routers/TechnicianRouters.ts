@@ -3,7 +3,6 @@ import express from "express";
 import { getTechnicianListSchema } from "../validator/getTechnicianListSchema";
 import { getTechnicianByIdSchema } from "../validator/getTechnicianByIdSchema";
 import { createTechnicianSchema } from "../validator/createTechnicianSchema";
-import { updateTechnicianSchema } from "../validator/updateTechnicianSchema";
 
 import { GetTechnicianListController } from "../useCases/getTechnicianList/GetTechnicianListController";
 import { GetTechnicianByIdController } from "../useCases/getTechnicianById/GetTechnicianByIdController";
@@ -265,7 +264,7 @@ technicianRouter.get(
  */
 technicianRouter.put(
   "/:id",
-  updateTechnicianSchema,
+  createTechnicianSchema,
   updateTechnicianController.handle
 );
 
