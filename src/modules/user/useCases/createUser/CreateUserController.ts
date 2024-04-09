@@ -11,10 +11,18 @@ export class CreateUserController {
     }
 
     const { name, email, password } = req.body;
+    const userPayload = req.headers.user as string;
+    const { id: userId } = JSON.parse(userPayload!!);
+
     const createUserUseCase = new CreateUserUseCase();
 
     try {
-      const result = await createUserUseCase.execute({ name, email, password });
+      const result = await createUserUseCase.execute({
+        name,
+        email,
+        password,
+        userId,
+      });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
       return res.status(500).json(error);

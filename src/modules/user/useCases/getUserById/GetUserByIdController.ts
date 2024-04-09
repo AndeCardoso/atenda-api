@@ -11,11 +11,16 @@ export class GetUserByIdController {
     }
 
     const { id } = req.params;
-    console.log(id);
+    const userPayload = req.headers.user as string;
+    const { id: userId } = JSON.parse(userPayload!!);
+
     const getUserByIdUseCase = new GetUserByIdUseCase();
 
     try {
-      const result = await getUserByIdUseCase.execute(Number(id));
+      const result = await getUserByIdUseCase.execute(
+        Number(id),
+        Number(userId)
+      );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
       return res.status(500).json(error);

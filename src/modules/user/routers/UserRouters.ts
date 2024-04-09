@@ -7,6 +7,7 @@ import { createUserSchema } from "../validator/createUserSchema";
 import { GetListUsersController } from "../useCases/getListUsers/GetListUsersController";
 import { GetUserByIdController } from "../useCases/getUserById/GetUserByIdController";
 import { CreateUserController } from "../useCases/createUser/CreateUserController";
+import { tokenValidation } from "@middlewares/authMiddleware";
 
 const userRouter = express.Router();
 
@@ -70,7 +71,12 @@ const createUserController = new CreateUserController();
  *                     type: string
  *                     format: date-time
  */
-userRouter.get("/list", getListUsersSchema, getListUsersController.handle);
+userRouter.get(
+  "/list",
+  tokenValidation,
+  getListUsersSchema,
+  getListUsersController.handle
+);
 
 /**
  * @swagger
@@ -104,7 +110,12 @@ userRouter.get("/list", getListUsersSchema, getListUsersController.handle);
  *                   type: string
  *                   format: date-time
  */
-userRouter.get("/:id", getUserByIdSchema, getUserByIdController.handle);
+userRouter.get(
+  "/:id",
+  tokenValidation,
+  getUserByIdSchema,
+  getUserByIdController.handle
+);
 
 /**
  * @swagger

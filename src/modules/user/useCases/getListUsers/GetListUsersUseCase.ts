@@ -15,19 +15,31 @@ export class GetListUsersUseCase {
     limit = 20,
     order = orderEnum.ASC,
     column = userColumnTypesEnum.NAME,
+    userId,
   }: IPaginationParams<TUserColumnTypes>): Promise<
     HttpResponse<IPaginationResponse<UserResponseDTO>>
   > {
     const offset = (page - 1) * limit;
 
     try {
+      const admin = await prisma.user.findUnique({
+        select: {
+          id: true,
+          companyId: true,
+          updated_at: true,
+        },
+        where: { id: userId, admin: true },
+      });
+
       const users = await prisma.user.findMany({
         select: {
           id: true,
           name: true,
           email: true,
+          admin: true,
           updated_at: true,
         },
+        where: { companyId: admin?.companyId },
         orderBy: { [column]: order },
         take: limit,
         skip: offset,

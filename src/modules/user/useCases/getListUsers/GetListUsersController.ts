@@ -15,6 +15,9 @@ export class GetListUsersController {
     const { page, limit, order, column } =
       req.query as IPaginationParams<TUserColumnTypes>;
 
+    const userPayload = req.headers.user as string;
+    const { id } = JSON.parse(userPayload!!);
+
     const getAllUsersUseCase = new GetListUsersUseCase();
 
     try {
@@ -23,10 +26,11 @@ export class GetListUsersController {
         limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "name",
+        userId: id,
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }
