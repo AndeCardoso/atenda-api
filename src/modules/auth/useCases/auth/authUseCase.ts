@@ -31,8 +31,11 @@ export class AuthUseCase {
       return badRequest("E-mail ou senha inválida");
     }
 
-    const userId = email;
-    const token = jwt.sign({ userId }, secretKey, {
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+    };
+    const token = jwt.sign({ userPayload }, secretKey, {
       expiresIn: `${accessExpireTime}`,
     });
 

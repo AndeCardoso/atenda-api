@@ -12,6 +12,9 @@ export class GetTechnicianListController {
       return res.status(400).json(new ParamsError(errors));
     }
 
+    const userPayload = req.headers.user as string;
+    const { id } = JSON.parse(userPayload!!);
+
     const { page, limit, order, column, search } =
       req.query as IPaginationParams<TTechnicianColumnTypes>;
 
@@ -24,11 +27,12 @@ export class GetTechnicianListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
+        userId: Number(id),
       });
 
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }

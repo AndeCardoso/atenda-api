@@ -13,10 +13,20 @@ export class CreateTechnicianUseCase {
     cpf,
     phone,
     position,
-    address,
+    status,
+    nickname,
+    cep,
+    street,
+    number,
+    complement,
+    district,
+    state,
+    city,
+    userId,
   }: CreateTechnicianDTO): Promise<HttpResponse<TechnicianResponseDTO>> {
     const checkTechnicianExistence = await prisma.technician.findUnique({
       where: {
+        userId,
         cpf,
       },
     });
@@ -28,13 +38,14 @@ export class CreateTechnicianUseCase {
     try {
       const newAddress = await prisma.address.create({
         data: {
-          cep: address.cep,
-          street: address.street,
-          number: address.number,
-          complement: address.complement,
-          district: address.district,
-          state: address.state,
-          city: address.city,
+          nickname,
+          cep,
+          street,
+          number,
+          complement,
+          district,
+          state,
+          city,
         },
       });
 
@@ -44,8 +55,9 @@ export class CreateTechnicianUseCase {
           phone,
           cpf,
           position,
-          status: technicianStatusEnum.AVAILABLE,
+          status: status ?? technicianStatusEnum.AVAILABLE,
           addressId: newAddress.id,
+          userId,
         },
       });
 
@@ -57,13 +69,14 @@ export class CreateTechnicianUseCase {
         position: newTechnician.position,
         status: newTechnician.status,
         address: {
-          cep: newAddress.cep,
-          district: newAddress.district,
-          street: newAddress.state,
-          number: newAddress.number,
-          complement: newAddress.complement ?? null,
-          state: newAddress.state,
-          city: newAddress.city,
+          nickname: newAddress?.nickname,
+          cep: newAddress?.cep,
+          district: newAddress?.district,
+          street: newAddress?.state,
+          number: newAddress?.number,
+          complement: newAddress?.complement ?? null,
+          state: newAddress?.state,
+          city: newAddress?.city,
         },
         updated_at: newTechnician.updated_at,
       });

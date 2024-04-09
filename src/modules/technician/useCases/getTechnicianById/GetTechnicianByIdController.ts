@@ -9,14 +9,22 @@ export class GetTechnicianByIdController {
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }
+
+    const userPayload = req.headers.user as string;
+    const { id: userId } = JSON.parse(userPayload!!);
+
     const { id } = req.params;
+
     const getTechnicianByIdUseCase = new GetTechnicianByIdUseCase();
 
     try {
-      const result = await getTechnicianByIdUseCase.execute(Number(id));
+      const result = await getTechnicianByIdUseCase.execute(
+        Number(id),
+        Number(userId)
+      );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }

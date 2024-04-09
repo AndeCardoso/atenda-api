@@ -7,10 +7,11 @@ import { CreateTechnicianDTO } from "@modules/technician/dtos/CreateTechnicianDT
 export class UpdateTechnicianUseCase {
   async execute(
     id: number,
+    userId: number,
     data: CreateTechnicianDTO
   ): Promise<HttpResponse<TechnicianResponseDTO>> {
     const technician = await prisma.technician.update({
-      where: { id },
+      where: { userId, id },
       data: {
         name: data.name,
         phone: data.phone,
@@ -22,13 +23,13 @@ export class UpdateTechnicianUseCase {
     const technicianAddress = await prisma.address.update({
       where: { id: technician.addressId },
       data: {
-        street: data.address.street,
-        number: data.address.number,
-        complement: data.address.complement,
-        district: data.address.district,
-        cep: data.address.cep,
-        state: data.address.state,
-        city: data.address.city,
+        street: data.street,
+        number: data.number,
+        complement: data.complement,
+        district: data.district,
+        cep: data.cep,
+        state: data.state,
+        city: data.city,
       },
     });
 

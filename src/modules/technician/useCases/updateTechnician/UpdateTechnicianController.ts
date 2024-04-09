@@ -9,16 +9,23 @@ export class UpdateTechnicianController {
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }
+    const userPayload = req.headers.user as string;
+    const { id: userId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
     const body = req.body;
+
     const updateTechnicianUseCase = new UpdateTechnicianUseCase();
 
     try {
-      const result = await updateTechnicianUseCase.execute(Number(id), body);
+      const result = await updateTechnicianUseCase.execute(
+        Number(id),
+        Number(userId),
+        body
+      );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }

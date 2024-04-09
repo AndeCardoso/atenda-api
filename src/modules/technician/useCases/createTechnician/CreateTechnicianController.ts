@@ -10,41 +10,19 @@ export class CreateTechnicianController {
       return res.status(400).json(new ParamsError(errors));
     }
 
-    const {
-      name,
-      cpf,
-      phone,
-      position,
-      cep,
-      street,
-      number,
-      complement,
-      district,
-      state,
-      city,
-    } = req.body;
+    const userPayload = req.headers.user as string;
+    const { id } = JSON.parse(userPayload!!);
 
     const createTechnicianUseCase = new CreateTechnicianUseCase();
 
     try {
       const result = await createTechnicianUseCase.execute({
-        name,
-        cpf,
-        phone,
-        position,
-        address: {
-          cep,
-          street,
-          number,
-          complement,
-          district,
-          state,
-          city,
-        },
+        ...req.body,
+        userId: Number(id),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
-      return res.status(500).json(error);
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }
