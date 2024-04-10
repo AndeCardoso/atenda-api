@@ -8,10 +8,11 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
-import userRouter from "./modules/user/routers/UserRouters";
+import companyRouter from "@modules/company/routers/CompanyRouters";
 import authRouter from "./modules/auth/routers/AuthRouters";
-import technicianRouter from "@modules/technician/routers/TechnicianRouters";
 import { tokenValidation } from "@middlewares/authMiddleware";
+import userRouter from "./modules/user/routers/UserRouters";
+import technicianRouter from "@modules/technician/routers/TechnicianRouters";
 
 export const app: Application = express();
 
@@ -23,11 +24,12 @@ app.use(express.json());
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use("/user/", userRouter);
+app.use("/company/", companyRouter);
 app.use("/auth/", authRouter);
 
+app.use("/user/", tokenValidation, userRouter);
 app.use("/technician/", tokenValidation, technicianRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.send("Wellcome to server!");
+  res.send("Atenda server");
 });
