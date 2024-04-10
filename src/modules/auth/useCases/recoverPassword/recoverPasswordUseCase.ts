@@ -25,7 +25,7 @@ export class RecoverPasswordUseCase {
       }
     });
 
-    const checkUserExistence = await prisma.user.findUnique({
+    const checkUserExistence = await prisma.user.findFirst({
       where: {
         email,
       },

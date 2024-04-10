@@ -14,7 +14,7 @@ export class CreateCompanyUseCase {
     email,
     password,
   }: CreateCompanyDTO): Promise<HttpResponse<CompanyResponseDTO>> {
-    const checkUserExistence = await prisma.user.findUnique({
+    const checkUserExistence = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -24,13 +24,13 @@ export class CreateCompanyUseCase {
       return badRequest("E-mail já cadastrado");
     }
 
-    const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
-
     const company = await prisma.company.create({
       data: {
         name: companyName,
       },
     });
+
+    const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
 
     const user = await prisma.user.create({
       data: {

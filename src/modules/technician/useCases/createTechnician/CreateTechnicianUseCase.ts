@@ -22,7 +22,7 @@ export class CreateTechnicianUseCase {
     city,
     userId,
   }: CreateTechnicianDTO): Promise<HttpResponse<TechnicianResponseDTO>> {
-    const checkTechnicianExistence = await prisma.technician.findUnique({
+    const checkTechnicianExistence = await prisma.technician.findFirst({
       where: {
         userId,
         cpf,

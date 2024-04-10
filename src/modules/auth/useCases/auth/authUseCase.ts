@@ -15,7 +15,7 @@ export class AuthUseCase {
     email,
     password,
   }: AuthRequestDTO): Promise<HttpResponse<AuthResponseDTO>> {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         email,
       },

@@ -14,7 +14,7 @@ export class CreateUserUseCase {
     password,
     userId,
   }: CreateUserDTO): Promise<HttpResponse<UserResponseDTO>> {
-    const checkUserExistence = await prisma.user.findUnique({
+    const checkUserExistence = await prisma.user.findFirst({
       where: {
         email,
       },
