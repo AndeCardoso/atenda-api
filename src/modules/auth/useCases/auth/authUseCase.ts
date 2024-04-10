@@ -2,15 +2,19 @@ import "dotenv/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
-import { AppError } from "@errors/AppErrors";
 import { AuthRequestDTO } from "@modules/auth/dtos/auth/AuthRequestDTO";
 import { AuthResponseDTO } from "@modules/auth/dtos/auth/AuthResponseDTO";
+import { badRequest, ok } from "@helper/http/httpHelper";
+import { HttpResponse } from "@shared/protocols/http";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 const accessExpireTime = process.env.ACCESS_EXPIRE_TIME as jwt.Secret;
 
 export class AuthUseCase {
-  async execute({ email, password }: AuthRequestDTO): Promise<AuthResponseDTO> {
+  async execute({
+    email,
+    password,
+  }: AuthRequestDTO): Promise<HttpResponse<AuthResponseDTO>> {
     const user = await prisma.user.findUnique({
       where: {
         email,
@@ -18,17 +22,20 @@ export class AuthUseCase {
     });
 
     if (!user) {
-      throw new AppError("E-mail ou senha inválida", 400);
+      return badRequest("E-mail ou senha inválida");
     }
 
     const match = await bcrypt.compare(password, user?.password);
 
     if (!match) {
-      throw new AppError("E-mail ou senha inválida", 400);
+      return badRequest("E-mail ou senha inválida");
     }
 
-    const userId = email;
-    const token = jwt.sign({ userId }, secretKey, {
+    const userPayload = {
+      id: user.id,
+      email: user.email,
+    };
+    const token = jwt.sign({ userPayload }, secretKey, {
       expiresIn: `${accessExpireTime}`,
     });
 
@@ -36,6 +43,6 @@ export class AuthUseCase {
       token,
     };
 
-    return response;
+    return ok(response);
   }
 }

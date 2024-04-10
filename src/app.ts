@@ -10,7 +10,8 @@ import swaggerJSDoc from "swagger-jsdoc";
 
 import userRouter from "./modules/user/routers/UserRouters";
 import authRouter from "./modules/auth/routers/AuthRouters";
-import { AppError } from "./errors/AppErrors";
+import technicianRouter from "@modules/technician/routers/TechnicianRouters";
+import { tokenValidation } from "@middlewares/authMiddleware";
 
 export const app: Application = express();
 
@@ -25,22 +26,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/user/", userRouter);
 app.use("/auth/", authRouter);
 
+app.use("/technician/", tokenValidation, technicianRouter);
+
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.send("Wellcome to server!");
 });
-
-app.use(
-  (err: Error, request: Request, response: Response, next: NextFunction) => {
-    if (err instanceof AppError) {
-      return response.status(err.statusCode).json({
-        status: "error",
-        message: err.message,
-      });
-    }
-
-    return response.status(500).json({
-      status: "error",
-      message: `Erro interno do servidor - ${err.message}`,
-    });
-  }
-);

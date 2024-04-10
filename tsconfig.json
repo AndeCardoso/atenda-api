@@ -8,10 +8,13 @@
     "baseUrl": ".",
     "paths": {
       "@errors/*": ["./src/errors/*"],
+      "@helper/*": ["./src/helper/*"],
       "@middlewares/*": ["./src/middlewares/*"],
       "@modules/*": ["./src/modules/*"],
       "@services/*": ["./src/services/*"],
       "@prismaClient/*": ["./src/prismaClient/*"],
+      "@shared/*": ["src/shared/*"],
+      "@utils/*": ["src/utils/*"],
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

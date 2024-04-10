@@ -1,10 +1,22 @@
 import { Request, Response } from "express";
+import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import { GetListUsersUseCase } from "./GetListUsersUseCase";
-import { IGetListUsersParams, orderEnum } from "./paramsType";
+import { TUserColumnTypes } from "./paramsType";
+import { validationResult } from "express-validator";
+import { ParamsError } from "@errors/ParamError";
 
 export class GetListUsersController {
   async handle(req: Request, res: Response) {
-    const { page, limit, order, column } = req.query as IGetListUsersParams;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(new ParamsError(errors));
+    }
+
+    const { page, limit, order, column } =
+      req.query as IPaginationParams<TUserColumnTypes>;
+
+    const userPayload = req.headers.user as string;
+    const { id } = JSON.parse(userPayload!!);
 
     const getAllUsersUseCase = new GetListUsersUseCase();
 
@@ -14,10 +26,11 @@ export class GetListUsersController {
         limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "name",
+        userId: id,
       });
-      return res.status(200).json(result);
-    } catch (e) {
-      res.status(404).json(e);
+      return res.status(result.statusCode).json(result.body);
+    } catch (error) {
+      console.log(JSON.stringify(error, null, 2));
     }
   }
 }

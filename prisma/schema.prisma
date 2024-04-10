@@ -7,14 +7,133 @@ datasource db {
   provider = "postgresql"
 }
 
+model Company {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  User       User[]
+
+  @@map("companies")
+}
+
 model User {
-  id           Int      @id @default(autoincrement())
-  name         String
-  email        String   @unique
+  id           Int            @id @default(autoincrement())
+  name         String?
+  email        String         @unique
   password     String
   recoverToken String?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  admin        Boolean        @default(false)
+  company      Company?       @relation(fields: [companyId], references: [id])
+  companyId    Int?
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  Technician   Technician[]
+  Customer     Customer[]
+  ServiceOrder ServiceOrder[]
 
   @@map("users")
+}
+
+model Technician {
+  id           Int            @id @default(autoincrement())
+  status       Int
+  name         String
+  phone        String
+  cpf          String         @unique
+  position     Int
+  address      Address        @relation(fields: [addressId], references: [id])
+  addressId    Int
+  user         User           @relation(fields: [userId], references: [id])
+  userId       Int
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  ServiceOrder ServiceOrder[]
+
+  @@map("technicians")
+}
+
+model Customer {
+  id           Int            @id @default(autoincrement())
+  status       Int
+  name         String
+  document     String         @unique
+  phone        String
+  secondPhone  String?
+  email        String
+  address      Address        @relation(fields: [addressId], references: [id])
+  addressId    Int
+  user         User           @relation(fields: [userId], references: [id])
+  userId       Int
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  ServiceOrder ServiceOrder[]
+  Equipment    Equipment[]
+
+  @@map("customers")
+}
+
+model Equipment {
+  id           Int            @id @default(autoincrement())
+  status       Int
+  customer     Customer       @relation(fields: [customerId], references: [id])
+  customerId   Int
+  nickname     String?
+  brand        String
+  model        String
+  serialNumber String?
+  description  String?
+  voltage      String?
+  color        String?
+  accessories  String?
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  ServiceOrder ServiceOrder[]
+
+  @@map("equipments")
+}
+
+model Address {
+  id           Int            @id @default(autoincrement())
+  nickname     String?
+  cep          String
+  street       String
+  number       String
+  complement   String?
+  district     String
+  state        String
+  city         String
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  Customer     Customer[]
+  Technician   Technician[]
+  ServiceOrder ServiceOrder[]
+
+  @@map("addresses")
+}
+
+model ServiceOrder {
+  id               Int        @id @default(autoincrement())
+  status           Int
+  technician       Technician @relation(fields: [technicianId], references: [id])
+  technicianId     Int
+  customer         Customer   @relation(fields: [customerId], references: [id])
+  customerId       Int
+  address          Address    @relation(fields: [addressId], references: [id])
+  addressId        Int
+  equipment        Equipment  @relation(fields: [equipmentId], references: [id])
+  equipmentId      Int
+  selectedVoltage  String
+  reportedDefect   String
+  foundDefect      String?
+  orderedServices  String
+  executedServices String?
+  observations     String?
+  closed_at        DateTime?
+  user             User       @relation(fields: [userId], references: [id])
+  userId           Int
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+
+  @@map("serviceOrders")
 }

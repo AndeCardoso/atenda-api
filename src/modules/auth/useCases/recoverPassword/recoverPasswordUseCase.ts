@@ -2,9 +2,10 @@ import "dotenv/config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
-import { AppError } from "@errors/AppErrors";
 import { RecoverPasswordResponseDTO } from "@modules/auth/dtos/recoverPassword/RecoverPasswordResponseDTO";
 import { RecoverPasswordRequestDTO } from "@modules/auth/dtos/recoverPassword/RecoverPasswordRequestDTO";
+import { badRequest, ok, serverError } from "@helper/http/httpHelper";
+import { HttpResponse } from "@shared/protocols/http";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 const accessExpireTime = process.env.ACCESS_EXPIRE_TIME;
@@ -15,10 +16,12 @@ export class RecoverPasswordUseCase {
     email,
     password,
     token,
-  }: RecoverPasswordRequestDTO): Promise<RecoverPasswordResponseDTO> {
+  }: RecoverPasswordRequestDTO): Promise<
+    HttpResponse<RecoverPasswordResponseDTO>
+  > {
     jwt.verify(token, secretKey, (err: jwt.VerifyErrors | null) => {
       if (err) {
-        throw new AppError("Token de segurança inválido");
+        return badRequest("Token de segurança inválido");
       }
     });
 
@@ -31,7 +34,7 @@ export class RecoverPasswordUseCase {
     const checkedToken = token === checkUserExistence?.recoverToken;
 
     if (!checkUserExistence || !checkedToken) {
-      throw new AppError("E-mail ou token de segurança inválido", 400);
+      return badRequest("E-mail ou token de segurança inválido");
     }
 
     const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
@@ -55,11 +58,11 @@ export class RecoverPasswordUseCase {
     );
 
     if (!result) {
-      throw new AppError("Erro no processo de recuperação de senha", 400);
+      return serverError("Erro no processo de recuperação de senha");
     }
 
-    return {
+    return ok({
       token: accessToken,
-    };
+    });
   }
 }

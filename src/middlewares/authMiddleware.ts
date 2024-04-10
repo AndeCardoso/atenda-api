@@ -4,28 +4,33 @@ import * as jwt from "jsonwebtoken";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 
-export const validarToken = (
+export const tokenValidation = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization;
+  try {
+    const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ error: "Não esta logado" });
-  }
-
-  const decoded = jwt.verify(
-    token,
-    secretKey,
-    (err: jwt.VerifyErrors | null) => {
-      if (err) {
-        return res.status(401).send({ detail: "Token inválido" });
-      }
+    if (!token) {
+      return res.status(401).json({ error: "Não esta logado" });
     }
-  );
 
-  req.user = decoded;
+    jwt.verify(token, secretKey, (err: jwt.VerifyErrors | null) => {
+      if (err) {
+        return res.status(401).json({ detail: "Token inválido" });
+      }
+    });
 
-  next();
+    const { userPayload } = jwt.decode(token) as {
+      userPayload: { id: number; email: string };
+    };
+
+    req.headers["user"] = JSON.stringify(userPayload);
+
+    next();
+  } catch (error) {
+    console.log(JSON.stringify(error, null, 2));
+    return res.status(500).json(error);
+  }
 };

@@ -9,5 +9,9 @@ export const swaggerOptions: swaggerJSDoc.Options = {
       description: "Documentação da API para o Sistema Atenda",
     },
   },
-  apis: ["./src/modules/auth/routers/*.ts", "./src/modules/user/routers/*.ts"],
+  apis: [
+    "./src/modules/auth/routers/*.ts",
+    "./src/modules/user/routers/*.ts",
+    "./src/modules/technician/routers/*.ts",
+  ],
 };
