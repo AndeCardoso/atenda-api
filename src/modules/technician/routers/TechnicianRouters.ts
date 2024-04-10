@@ -313,6 +313,12 @@ technicianRouter.put(
  *                 updated_at:
  *                   type: string
  *                   format: date-time
+ *             required:
+ *               - name
+ *               - phone
+ *               - cpf
+ *               - position
+ *               - email
  *     responses:
  *       201:
  *         description: OK

@@ -7,7 +7,7 @@ import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import {
   TTechnicianColumnTypes,
   technicianColumnTypesEnum,
-} from "./paramsType";
+} from "../../constants/paramsType";
 import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
 import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";

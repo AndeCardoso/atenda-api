@@ -1,8 +1,5 @@
 import { address } from "@shared/types/address.type";
-import {
-  technicianPositionEnum,
-  technicianStatusEnum,
-} from "./TechnicianResponseDTO";
+import { technicianPositionEnum, technicianStatusEnum } from "../constants";
 import { IUserRequest } from "@shared/types/pagination.type";
 
 export interface CreateTechnicianDTO extends IUserRequest, address {

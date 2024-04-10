@@ -1,9 +1,7 @@
 import { prisma } from "@prismaClient/client";
 import { CreateTechnicianDTO } from "@modules/technician/dtos/CreateTechnicianDTO";
-import {
-  TechnicianResponseDTO,
-  technicianStatusEnum,
-} from "@modules/technician/dtos/TechnicianResponseDTO";
+import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
+import { technicianStatusEnum } from "@modules/technician/constants";
 import { badRequest, created, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 

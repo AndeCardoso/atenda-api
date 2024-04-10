@@ -19,6 +19,8 @@ export const technicianColumnArray = [
   "updated_at",
 ];
 
+export const technicianFilterTypeArray = ["position", "status"];
+
 export enum technicianColumnTypesEnum {
   ID = "id",
   NAME = "name",
@@ -28,4 +30,9 @@ export enum technicianColumnTypesEnum {
   STATUS = "status",
   ADDRESS = "address",
   UPDATED_AT = "updated_at",
+}
+
+export enum technicianFilterTypesEnum {
+  POSITION = "position",
+  STATUS = "status",
 }

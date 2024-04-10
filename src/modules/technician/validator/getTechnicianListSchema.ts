@@ -1,6 +1,9 @@
 import { orderEnum } from "@shared/types/pagination.type";
 import { checkSchema } from "express-validator";
-import { technicianColumnArray } from "../useCases/getTechnicianList/paramsType";
+import {
+  technicianColumnArray,
+  technicianFilterTypeArray,
+} from "../constants/paramsType";
 
 export const getTechnicianListSchema = checkSchema({
   page: {
@@ -46,6 +49,19 @@ export const getTechnicianListSchema = checkSchema({
       options: [technicianColumnArray],
       errorMessage:
         "Nome de coluna inválida, escolha entre os campos retornados na lista de técnicos",
+    },
+  },
+  filter: {
+    optional: true,
+    isString: {
+      errorMessage: "Deve ser do tipo string",
+      bail: true,
+    },
+    isIn: {
+      options: [technicianFilterTypeArray],
+      errorMessage: `Nome do filtro inválido, escolha entre os seguintes valores: ${technicianFilterTypeArray.reduce(
+        (ac, el) => `${ac}, ${el}`
+      )}`,
     },
   },
 });

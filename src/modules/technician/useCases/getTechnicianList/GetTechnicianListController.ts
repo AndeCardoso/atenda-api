@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
-import { TTechnicianColumnTypes } from "./paramsType";
+import { TTechnicianColumnTypes } from "../../constants/paramsType";
 import { GetTechnicianListUseCase } from "./GetTechnicianListUseCase";
 import { validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
