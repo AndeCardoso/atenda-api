@@ -34,6 +34,7 @@ export class AuthUseCase {
     const userPayload = {
       id: user.id,
       email: user.email,
+      admin: user.admin,
     };
     const token = jwt.sign({ userPayload }, secretKey, {
       expiresIn: `${accessExpireTime}`,
