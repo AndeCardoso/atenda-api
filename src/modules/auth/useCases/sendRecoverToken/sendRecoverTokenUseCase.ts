@@ -21,7 +21,7 @@ export class SendRecoverTokenUseCase {
   }: SendRecoverTokenRequestDTO): Promise<
     HttpResponse<SendRecoverTokenResponseDTO>
   > {
-    const checkUserExistence = await prisma.user.findUnique({
+    const checkUserExistence = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -35,7 +35,7 @@ export class SendRecoverTokenUseCase {
       expiresIn: `${recoverExpireTime}`,
     });
 
-    const result = await prisma.user.update({
+    const result = await prisma.user.updateMany({
       where: {
         email,
       },

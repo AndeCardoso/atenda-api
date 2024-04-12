@@ -15,7 +15,7 @@ export class AuthUseCase {
     email,
     password,
   }: AuthRequestDTO): Promise<HttpResponse<AuthResponseDTO>> {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
         email,
       },
@@ -33,7 +33,9 @@ export class AuthUseCase {
 
     const userPayload = {
       id: user.id,
+      name: user.name,
       email: user.email,
+      admin: user.admin,
     };
     const token = jwt.sign({ userPayload }, secretKey, {
       expiresIn: `${accessExpireTime}`,

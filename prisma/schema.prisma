@@ -20,7 +20,7 @@ model Company {
 model User {
   id           Int            @id @default(autoincrement())
   name         String?
-  email        String         @unique
+  email        String
   password     String
   recoverToken String?
   admin        Boolean        @default(false)
@@ -40,7 +40,7 @@ model Technician {
   status       Int
   name         String
   phone        String
-  cpf          String         @unique
+  cpf          String
   position     Int
   address      Address        @relation(fields: [addressId], references: [id])
   addressId    Int
@@ -57,7 +57,7 @@ model Customer {
   id           Int            @id @default(autoincrement())
   status       Int
   name         String
-  document     String         @unique
+  document     String
   phone        String
   secondPhone  String?
   email        String

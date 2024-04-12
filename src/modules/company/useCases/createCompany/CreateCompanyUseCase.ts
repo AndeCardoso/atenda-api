@@ -1,19 +1,19 @@
 import bcrypt from "bcrypt";
 import { prisma } from "@prismaClient/client";
-import { CreateUserDTO } from "@modules/user/dtos/CreateUserDTO";
-import { UserResponseDTO } from "@modules/user/dtos/UserResponseDTO";
 import { badRequest, created } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
+import { CreateCompanyDTO } from "@modules/company/dtos/CreateCompanyDTO";
+import { CompanyResponseDTO } from "@modules/company/dtos/CompanyResponseDTO";
 
 const saltOrRounds = process.env.CRYPTO_SALT_ROUNDS;
 
-export class CreateUserUseCase {
+export class CreateCompanyUseCase {
   async execute({
+    companyName,
     name,
     email,
     password,
-    userId,
-  }: CreateUserDTO): Promise<HttpResponse<UserResponseDTO>> {
+  }: CreateCompanyDTO): Promise<HttpResponse<CompanyResponseDTO>> {
     const checkUserExistence = await prisma.user.findFirst({
       where: {
         email,
@@ -24,18 +24,11 @@ export class CreateUserUseCase {
       return badRequest("E-mail já cadastrado");
     }
 
-    const admin = await prisma.user.findUnique({
-      select: {
-        id: true,
-        companyId: true,
-        updated_at: true,
+    const company = await prisma.company.create({
+      data: {
+        name: companyName,
       },
-      where: { id: userId, admin: true },
     });
-
-    if (!admin) {
-      return badRequest("Usuário não possui permissão");
-    }
 
     const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));
 
@@ -44,16 +37,18 @@ export class CreateUserUseCase {
         name,
         email,
         password: hashedPassword,
-        companyId: admin.companyId,
+        admin: true,
+        companyId: company.id,
       },
     });
 
     return created({
       id: user.id,
+      companyName: company.name,
       name: user.name,
       email: user.email,
-      admin: false,
-      updated_at: user.updated_at,
+      admin: user.admin,
+      created_at: user.created_at,
     });
   }
 }
