@@ -1,4 +1,5 @@
 export interface address {
+  id?: number;
   nickname?: string | null;
   cep: string;
   street: string;

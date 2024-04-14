@@ -1,4 +1,8 @@
-import { FieldValidationError, Result } from "express-validator";
+import {
+  FieldValidationError,
+  Result,
+  ValidationError,
+} from "express-validator";
 
 export class ParamsError {
   public readonly name: string;
@@ -7,7 +11,7 @@ export class ParamsError {
     message: string;
   }[];
 
-  constructor(stack: Result<FieldValidationError>) {
+  constructor(stack: Result<FieldValidationError> | Result<ValidationError>) {
     this.name = "ParamsError";
     this.stack = stack.array().map((error) => {
       return { param: error.path, message: error.msg };
