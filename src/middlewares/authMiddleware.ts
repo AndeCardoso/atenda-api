@@ -30,7 +30,6 @@ export const tokenValidation = (
 
     next();
   } catch (error) {
-    console.log(JSON.stringify(error, null, 2));
     return res.status(500).json(error);
   }
 };

@@ -24,9 +24,9 @@ export const badRequest = (message: string): HttpResponse<any> => ({
   body: new BadRequestError(message),
 });
 
-export const unauthorized = (): HttpResponse<any> => ({
+export const unauthorized = (message: string): HttpResponse<any> => ({
   statusCode: 401,
-  body: new UnauthorizedError(),
+  body: new UnauthorizedError(message),
 });
 
 export const serverError = (error: Error): HttpResponse<any> => ({
