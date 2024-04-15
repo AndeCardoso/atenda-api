@@ -10,5 +10,15 @@ export const createCompanySchema = checkSchema({
     },
     errorMessage: "Nome da empresa precisa ter de 4 á 32 caracteres",
   },
+  companyDocument: {
+    notEmpty: true,
+    optional: false,
+    isLength: {
+      options: { min: 11, max: 14 },
+      errorMessage:
+        "Documento precisa ter 11 dígitos para CPF ou 14 dígitos para CNPJ",
+    },
+    errorMessage: "Documento é obrigatório",
+  },
   ...userSchemaObject,
 });

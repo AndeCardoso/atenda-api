@@ -10,6 +10,7 @@ datasource db {
 model Company {
   id         Int      @id @default(autoincrement())
   name       String?
+  document   String   @unique
   status     Int      @default(1)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

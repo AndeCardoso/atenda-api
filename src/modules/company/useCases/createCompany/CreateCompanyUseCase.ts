@@ -10,6 +10,7 @@ const saltOrRounds = process.env.CRYPTO_SALT_ROUNDS;
 export class CreateCompanyUseCase {
   async execute({
     companyName,
+    companyDocument,
     name,
     email,
     password,
@@ -24,9 +25,20 @@ export class CreateCompanyUseCase {
       return badRequest("E-mail já cadastrado");
     }
 
+    const checkCompanyExistence = await prisma.company.findFirst({
+      where: {
+        document: companyDocument,
+      },
+    });
+
+    if (Boolean(checkCompanyExistence)) {
+      return badRequest("Documento de empresa já cadastrado");
+    }
+
     const company = await prisma.company.create({
       data: {
         name: companyName,
+        document: companyDocument,
       },
     });
 
@@ -45,6 +57,7 @@ export class CreateCompanyUseCase {
     return created({
       id: user.id,
       companyName: company.name,
+      companyDocument: company.document,
       name: user.name,
       email: user.email,
       admin: user.admin,
