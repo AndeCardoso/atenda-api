@@ -29,13 +29,13 @@ export class GetCustomerByIdUseCase {
 
     const addressList = [];
     for (const id of customer.addressesId) {
-      const adress = await prisma.address.findUnique({
+      const address = await prisma.address.findUnique({
         where: {
           id,
         },
       });
 
-      addressList.push(adress);
+      addressList.push(address);
     }
 
     return ok({ ...customer, addresses: addressList });

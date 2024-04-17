@@ -14,7 +14,7 @@ export class ParamsError {
   constructor(stack: Result<FieldValidationError> | Result<ValidationError>) {
     this.name = "ParamsError";
     this.stack = stack.array().map((error) => {
-      return { param: error.path, message: error.msg };
+      return { param: error.type, message: error.msg };
     });
   }
 }

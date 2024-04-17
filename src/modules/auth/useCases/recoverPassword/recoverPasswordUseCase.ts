@@ -41,7 +41,8 @@ export class RecoverPasswordUseCase {
 
     const result = await prisma.user.update({
       where: {
-        email,
+        id: checkUserExistence.id,
+        companyId: checkUserExistence.companyId,
       },
       data: {
         password: hashedPassword,

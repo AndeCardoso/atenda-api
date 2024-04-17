@@ -9,6 +9,7 @@ export interface CustomerResponseDTO {
   secondPhone?: string | null;
   email: string;
   status: customerStatusEnum;
-  address: address;
-  updated_at: Date;
+  addresses: address[];
+  created_at?: Date;
+  updated_at?: Date;
 }

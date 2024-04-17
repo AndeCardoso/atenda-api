@@ -11,6 +11,7 @@ import {
 import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { CustomerResponseDTO } from "@modules/customer/dtos/CustomerResponseDTO";
+import { address } from "@shared/types/address.type";
 
 export class GetCustomerListUseCase {
   async execute({
@@ -50,17 +51,21 @@ export class GetCustomerListUseCase {
         skip: offset,
       });
 
+      const addressList: address[] = [];
+      const customerList: CustomerResponseDTO[] = [];
       for (const customer of customers) {
-        customer["addresses"] = [];
         for (const id of customer.addressesId) {
-          const adress = await prisma.address.findUnique({
+          const address = await prisma.address.findUnique({
             where: {
               id,
             },
           });
 
-          customer["addresses"].push(adress);
+          if (address) {
+            addressList.push(address);
+          }
         }
+        customerList.push({ ...customer, addresses: addressList });
       }
 
       const totalCustomers = customers.length;
@@ -71,7 +76,7 @@ export class GetCustomerListUseCase {
 
       return ok(
         paginationResponseMount<CustomerResponseDTO>({
-          data: customers,
+          data: customerList,
           page,
           limit,
           totalItems: totalCustomers,

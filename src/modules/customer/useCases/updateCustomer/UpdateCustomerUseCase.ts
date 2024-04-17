@@ -57,7 +57,7 @@ export class UpdateCustomerUseCase {
 
         const updatedAddress = await prisma.address.update({
           where: {
-            id: address.id,
+            id: Number(address.id),
           },
           data: {
             nickname,
