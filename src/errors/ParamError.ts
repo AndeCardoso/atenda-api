@@ -1,9 +1,8 @@
-import { Result } from "express-validator";
-
-type TValidationError = {
-  path: string;
-  msg: string;
-};
+import {
+  FieldValidationError,
+  ValidationError,
+  Result,
+} from "express-validator";
 
 type TStackError = {
   param: string;
@@ -14,10 +13,10 @@ export class ParamsError {
   public readonly name: string;
   public readonly stack: TStackError[];
 
-  constructor(stack: Result<TValidationError>) {
+  constructor(stack: Result<ValidationError | FieldValidationError>) {
     this.name = "ParamsError";
     this.stack = stack.array().map((error) => {
-      return { param: error.path, message: error.msg };
+      return { param: error.type, message: error.msg };
     });
   }
 }
