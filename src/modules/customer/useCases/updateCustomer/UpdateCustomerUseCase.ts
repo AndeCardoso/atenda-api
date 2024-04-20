@@ -73,6 +73,27 @@ export class UpdateCustomerUseCase {
         updatedAddresses.push(updatedAddress);
       }
 
+      const currentIdList = currentCustomer.addressesId;
+      const newIdList = data.addresses.map((address) => Number(address.id));
+
+      const newAddressesIdList: number[] = [];
+
+      const addressIdsToDelete = currentIdList.filter((curId) => {
+        if (newIdList.indexOf(curId) == -1) {
+          return curId;
+        } else {
+          newAddressesIdList.push(curId);
+        }
+      });
+
+      for (const addressIdToDelete of addressIdsToDelete) {
+        await prisma.address.delete({
+          where: {
+            id: addressIdToDelete,
+          },
+        });
+      }
+
       const customer = await prisma.customer.update({
         where: { userId, id },
         data: {
@@ -82,7 +103,7 @@ export class UpdateCustomerUseCase {
           secondPhone: data.secondPhone,
           email: data.email,
           status: data.status,
-          addressesId: updatedAddressIds,
+          addressesId: newAddressesIdList || updatedAddressIds,
         },
       });
 

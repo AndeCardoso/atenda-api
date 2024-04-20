@@ -51,7 +51,7 @@ export class GetCustomerListUseCase {
         skip: offset,
       });
 
-      const addressList: address[] = [];
+      let addressList: address[] = [];
       const customerList: CustomerResponseDTO[] = [];
       for (const customer of customers) {
         for (const id of customer.addressesId) {
@@ -66,6 +66,7 @@ export class GetCustomerListUseCase {
           }
         }
         customerList.push({ ...customer, addresses: addressList });
+        addressList = [];
       }
 
       const totalCustomers = customers.length;
