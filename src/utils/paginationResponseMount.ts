@@ -6,7 +6,7 @@ export interface IPaginationResponseMountParams<T> {
 }
 
 export interface IPaginationResponse<T> {
-  data: T[];
+  dataList: T[];
   totalPages: number;
   currentPage: number;
   totalItems: number;
@@ -20,7 +20,7 @@ export const paginationResponseMount = <T>({
 }: IPaginationResponseMountParams<T>): IPaginationResponse<T> => {
   const totalPages = Math.ceil(totalItems / limit);
   return {
-    data,
+    dataList: data,
     totalPages,
     currentPage: page,
     totalItems,

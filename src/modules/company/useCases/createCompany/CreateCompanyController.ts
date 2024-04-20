@@ -10,17 +10,10 @@ export class CreateCompanyController {
       return res.status(400).json(new ParamsError(errors));
     }
 
-    const { companyName, name, email, password } = req.body;
-
     const createCompanyUseCase = new CreateCompanyUseCase();
 
     try {
-      const result = await createCompanyUseCase.execute({
-        companyName,
-        email,
-        name,
-        password,
-      });
+      const result = await createCompanyUseCase.execute(req.body);
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
       return res.status(500).json(error);

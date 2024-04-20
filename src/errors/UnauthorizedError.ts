@@ -2,8 +2,8 @@ export class UnauthorizedError {
   public readonly name: string;
   public readonly message: string;
 
-  constructor() {
+  constructor(message: string = "Acesso não autorizado") {
     this.name = "Unauthorized";
-    this.message = "Acesso não autorizado";
+    this.message = message;
   }
 }
