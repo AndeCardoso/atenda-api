@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { CreateTechnicianUseCase } from "./CreateTechnicianUseCase";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class CreateTechnicianController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req.body);
+    const errors: Result = validationResult(req.body);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }

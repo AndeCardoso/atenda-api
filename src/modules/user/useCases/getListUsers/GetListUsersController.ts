@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import { GetListUsersUseCase } from "./GetListUsersUseCase";
 import { TUserColumnTypes } from "./paramsType";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class GetListUsersController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }

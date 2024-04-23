@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { AuthUseCase } from "./authUseCase";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class AuthController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }

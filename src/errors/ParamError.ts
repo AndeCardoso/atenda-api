@@ -13,10 +13,10 @@ export class ParamsError {
   public readonly name: string;
   public readonly stack: TStackError[];
 
-  constructor(stack: Result<ValidationError | FieldValidationError>) {
+  constructor(stack: Result<FieldValidationError>) {
     this.name = "ParamsError";
     this.stack = stack.array().map((error) => {
-      return { param: error.type, message: error.msg };
+      return { param: error.path, message: error.msg };
     });
   }
 }

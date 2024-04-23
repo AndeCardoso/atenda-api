@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import { TTechnicianColumnTypes } from "../../constants/paramsType";
 import { GetTechnicianListUseCase } from "./GetTechnicianListUseCase";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class GetTechnicianListController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }
