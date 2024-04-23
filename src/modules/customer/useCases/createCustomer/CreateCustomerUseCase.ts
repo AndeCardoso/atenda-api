@@ -17,14 +17,14 @@ export class CreateCustomerUseCase {
     addresses,
     userId,
   }: CreateCustomerDTO): Promise<HttpResponse<CustomerResponseDTO>> {
-    const checkTechnicianExistence = await prisma.customer.findFirst({
+    const checkCustomerExistence = await prisma.customer.findFirst({
       where: {
         userId,
         document,
       },
     });
 
-    if (Boolean(checkTechnicianExistence)) {
+    if (Boolean(checkCustomerExistence)) {
       return badRequest("Documento já cadastrado");
     }
 
