@@ -24,7 +24,7 @@ export class UpdateCustomerUseCase {
       }
 
       const updatedAddresses: address[] = [];
-      const updatedAddressIds: number[] = currentCustomer.addressesId;
+      const updatedAddressIds: number[] = currentCustomer.addressesId ?? [];
       for (const [index, address] of data.addresses.entries()) {
         const {
           nickname,
@@ -94,6 +94,9 @@ export class UpdateCustomerUseCase {
         });
       }
 
+      const updatedAddressIdList =
+        newAddressesIdList.length > 0 ? newAddressesIdList : updatedAddressIds;
+
       const customer = await prisma.customer.update({
         where: { userId, id },
         data: {
@@ -103,7 +106,7 @@ export class UpdateCustomerUseCase {
           secondPhone: data.secondPhone,
           email: data.email,
           status: data.status,
-          addressesId: newAddressesIdList || updatedAddressIds,
+          addressesId: [...updatedAddressIdList],
         },
       });
 
