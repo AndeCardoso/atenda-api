@@ -11,14 +11,14 @@ export class CreateCustomerController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const createCustomerUseCase = new CreateCustomerUseCase();
 
     try {
       const result = await createCustomerUseCase.execute({
         ...req.body,
-        userId: Number(id),
+        userId: Number(companyId),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

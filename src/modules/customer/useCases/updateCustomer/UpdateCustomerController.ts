@@ -10,7 +10,7 @@ export class UpdateCustomerController {
       return res.status(400).json(new ParamsError(errors));
     }
     const userPayload = req.headers.user as string;
-    const { id: userId } = JSON.parse(userPayload!!);
+    const { id: companyId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
     const body = req.body;
@@ -20,7 +20,7 @@ export class UpdateCustomerController {
     try {
       const result = await updateCustomerUseCase.execute(
         Number(id),
-        Number(userId),
+        Number(companyId),
         body
       );
       return res.status(result.statusCode).json(result.body);

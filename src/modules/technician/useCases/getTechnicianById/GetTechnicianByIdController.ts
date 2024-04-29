@@ -11,7 +11,7 @@ export class GetTechnicianByIdController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id: userId } = JSON.parse(userPayload!!);
+    const { id: companyId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
 
@@ -20,7 +20,7 @@ export class GetTechnicianByIdController {
     try {
       const result = await getTechnicianByIdUseCase.execute(
         Number(id),
-        Number(userId)
+        Number(companyId)
       );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

@@ -11,14 +11,14 @@ export class CreateTechnicianController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const createTechnicianUseCase = new CreateTechnicianUseCase();
 
     try {
       const result = await createTechnicianUseCase.execute({
         ...req.body,
-        userId: Number(id),
+        userId: Number(companyId),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

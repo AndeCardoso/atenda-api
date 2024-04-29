@@ -13,7 +13,7 @@ export class GetCustomerListController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const { page, limit, order, column, search } =
       req.query as IPaginationParams<TCustomerColumnTypes>;
@@ -27,7 +27,7 @@ export class GetCustomerListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
-        userId: Number(id),
+        userId: Number(companyId),
       });
 
       return res.status(result.statusCode).json(result.body);

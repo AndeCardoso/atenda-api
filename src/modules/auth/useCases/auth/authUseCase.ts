@@ -66,8 +66,9 @@ export class AuthUseCase {
     }
 
     const userPayload = {
-      id: user.id,
+      companyId: company?.id,
       companyName: company?.name,
+      id: user.id,
       name: user.name,
       email: user.email,
       admin: user.admin,

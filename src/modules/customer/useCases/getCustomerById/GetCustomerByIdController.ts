@@ -11,7 +11,7 @@ export class GetCustomerByIdController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id: userId } = JSON.parse(userPayload!!);
+    const { id: companyId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
 
@@ -20,7 +20,7 @@ export class GetCustomerByIdController {
     try {
       const result = await getCustomerByIdUseCase.execute(
         Number(id),
-        Number(userId)
+        Number(companyId)
       );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
