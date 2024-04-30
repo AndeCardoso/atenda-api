@@ -16,5 +16,6 @@ export const swaggerOptions: swaggerJSDoc.Options = {
     "./src/modules/user/routers/*.ts",
     "./src/modules/technician/routers/*.ts",
     "./src/modules/customer/routers/*.ts",
+    "./src/modules/equipment/routers/*.ts",
   ],
 };

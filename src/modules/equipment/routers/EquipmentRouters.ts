@@ -8,6 +8,7 @@ import { GetEquipmentByIdController } from "../useCases/getEquipmentById/GetEqui
 import { CreateEquipmentController } from "../useCases/createEquipment/CreateEquipmentController";
 import { GetEquipmentListController } from "../useCases/getEquipmentList/GetEquipmentListController";
 import { UpdateEquipmentController } from "../useCases/updateEquipment/UpdateEquipmentController";
+import { updateEquipmentSchema } from "../validator/updateEquipmentSchema";
 
 const equipmentRouter = express.Router();
 
@@ -264,7 +265,7 @@ equipmentRouter.get(
  */
 equipmentRouter.put(
   "/:id",
-  createEquipmentSchema,
+  updateEquipmentSchema,
   updateEquipmentController.handle
 );
 
