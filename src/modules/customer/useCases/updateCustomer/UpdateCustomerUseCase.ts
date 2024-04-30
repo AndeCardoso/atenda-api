@@ -8,14 +8,14 @@ import { address } from "@shared/types/address.type";
 export class UpdateCustomerUseCase {
   async execute(
     id: number,
-    userId: number,
+    companyId: number,
     data: CreateCustomerDTO
   ): Promise<HttpResponse<CustomerResponseDTO>> {
     try {
       const currentCustomer = await prisma.customer.findFirst({
         where: {
           id,
-          userId,
+          companyId,
         },
       });
 
@@ -74,31 +74,37 @@ export class UpdateCustomerUseCase {
       }
 
       const currentIdList = currentCustomer.addressesId;
-      const newIdList = data.addresses.map((address) => Number(address.id));
+      const newIdList = data.addresses.map((address) =>
+        address.id ? Number(address.id) : null
+      );
 
       const newAddressesIdList: number[] = [];
 
-      const addressIdsToDelete = currentIdList.filter((curId) => {
-        if (newIdList.indexOf(curId) == -1) {
-          return curId;
-        } else {
-          newAddressesIdList.push(curId);
-        }
-      });
+      const addressIdsToDelete = Boolean(currentIdList)
+        ? currentIdList.filter((curId) => {
+            if (newIdList[0] !== null && newIdList.indexOf(curId) == -1) {
+              return curId;
+            } else {
+              newAddressesIdList.push(curId);
+            }
+          })
+        : undefined;
 
-      for (const addressIdToDelete of addressIdsToDelete) {
-        await prisma.address.delete({
-          where: {
-            id: addressIdToDelete,
-          },
-        });
+      if (addressIdsToDelete && addressIdsToDelete.length > 0) {
+        for (const addressIdToDelete of addressIdsToDelete) {
+          await prisma.address.delete({
+            where: {
+              id: addressIdToDelete,
+            },
+          });
+        }
       }
 
       const updatedAddressIdList =
         newAddressesIdList.length > 0 ? newAddressesIdList : updatedAddressIds;
 
       const customer = await prisma.customer.update({
-        where: { userId, id },
+        where: { companyId, id },
         data: {
           name: data.name,
           document: data.document,
