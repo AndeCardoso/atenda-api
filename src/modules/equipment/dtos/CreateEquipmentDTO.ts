@@ -1,7 +1,7 @@
 import { equipmentStatusEnum } from "../constants";
-import { IUserRequest } from "@shared/types/pagination.type";
+import { ICompanyRequest } from "@shared/types/pagination.type";
 
-export interface CreateEquipmentDTO extends IUserRequest {
+export interface CreateEquipmentDTO extends ICompanyRequest {
   customerId: number;
   nickname?: string;
   brand: string;

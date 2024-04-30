@@ -12,6 +12,9 @@ export class GetEquipmentListController {
       return res.status(400).json(new ParamsError(errors));
     }
 
+    const userPayload = req.headers.user as string;
+    const { companyId } = JSON.parse(userPayload!!);
+
     const { customerId, page, limit, order, column, search } =
       req.query as unknown as GetEquipmentListRequestDTO;
 
@@ -25,6 +28,7 @@ export class GetEquipmentListController {
         column: column || "nickname",
         search: search,
         customerId: Number(customerId),
+        companyId: Number(companyId),
       });
 
       return res.status(result.statusCode).json(result.body);

@@ -12,7 +12,7 @@ export class CreateUserController {
 
     const { name, email, password } = req.body;
     const userPayload = req.headers.user as string;
-    const { id: userId } = JSON.parse(userPayload!!);
+    const { id } = JSON.parse(userPayload!!);
 
     const createUserUseCase = new CreateUserUseCase();
 
@@ -21,7 +21,7 @@ export class CreateUserController {
         name,
         email,
         password,
-        userId,
+        userId: Number(id),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

@@ -15,11 +15,11 @@ export class CreateCustomerUseCase {
     email,
     status,
     addresses,
-    userId,
+    companyId,
   }: CreateCustomerDTO): Promise<HttpResponse<CustomerResponseDTO>> {
     const checkCustomerExistence = await prisma.customer.findFirst({
       where: {
-        userId,
+        companyId,
         document,
       },
     });
@@ -66,7 +66,7 @@ export class CreateCustomerUseCase {
           document,
           status: status ?? customerStatusEnum.OK,
           addressesId: newAddressIds,
-          userId,
+          companyId,
         },
       });
 

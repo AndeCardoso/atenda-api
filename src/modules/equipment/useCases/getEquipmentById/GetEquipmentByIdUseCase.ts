@@ -4,7 +4,10 @@ import { HttpResponse } from "@shared/protocols/http";
 import { EquipmentResponseDTO } from "@modules/equipment/dtos/EquipmentResponseDTO";
 
 export class GetEquipmentByIdUseCase {
-  async execute(id: number): Promise<HttpResponse<EquipmentResponseDTO>> {
+  async execute(
+    id: number,
+    companyId: number
+  ): Promise<HttpResponse<EquipmentResponseDTO>> {
     const equipment = await prisma.equipment.findUnique({
       select: {
         id: true,
@@ -19,7 +22,7 @@ export class GetEquipmentByIdUseCase {
         status: true,
         updated_at: true,
       },
-      where: { id },
+      where: { companyId, id },
     });
 
     if (!equipment) {

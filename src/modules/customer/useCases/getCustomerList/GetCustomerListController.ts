@@ -27,7 +27,7 @@ export class GetCustomerListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
-        userId: Number(companyId),
+        companyId: Number(companyId),
       });
 
       return res.status(result.statusCode).json(result.body);

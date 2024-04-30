@@ -11,7 +11,7 @@ export class GetCustomerByIdController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id: companyId } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
 

@@ -1,6 +1,6 @@
-import { IUserRequest } from "@shared/types/pagination.type";
+import { ICompanyRequest } from "@shared/types/pagination.type";
 
-export interface CreateUserDTO extends IUserRequest {
+export interface CreateUserDTO extends Partial<ICompanyRequest> {
   name: string;
   email: string;
   password: string;

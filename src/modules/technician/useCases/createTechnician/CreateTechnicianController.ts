@@ -18,7 +18,7 @@ export class CreateTechnicianController {
     try {
       const result = await createTechnicianUseCase.execute({
         ...req.body,
-        userId: Number(companyId),
+        companyId: Number(companyId),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

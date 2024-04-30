@@ -10,13 +10,20 @@ export class UpdateEquipmentController {
       return res.status(400).json(new ParamsError(errors));
     }
 
+    const userPayload = req.headers.user as string;
+    const { companyId } = JSON.parse(userPayload!!);
+
     const { id } = req.params;
     const body = req.body;
 
     const updateEquipmentUseCase = new UpdateEquipmentUseCase();
 
     try {
-      const result = await updateEquipmentUseCase.execute(Number(id), body);
+      const result = await updateEquipmentUseCase.execute(
+        Number(id),
+        Number(companyId),
+        body
+      );
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
       console.log(JSON.stringify(error, null, 2));

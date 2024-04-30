@@ -10,7 +10,7 @@ export class UpdateTechnicianController {
       return res.status(400).json(new ParamsError(errors));
     }
     const userPayload = req.headers.user as string;
-    const { id: companyId } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const { id } = req.params;
     const body = req.body;

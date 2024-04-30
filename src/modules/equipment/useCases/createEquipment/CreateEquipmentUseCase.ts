@@ -16,11 +16,11 @@ export class CreateEquipmentUseCase {
     accessories,
     color,
     status,
-    userId,
+    companyId,
   }: CreateEquipmentDTO): Promise<HttpResponse<EquipmentResponseDTO>> {
     const customer = await prisma.customer.findFirst({
       where: {
-        userId,
+        companyId,
         id: customerId,
       },
     });
@@ -32,7 +32,7 @@ export class CreateEquipmentUseCase {
     try {
       const newEquipment = await prisma.equipment.create({
         data: {
-          customerId: customer?.id,
+          customerId: customer.id,
           nickname,
           brand,
           model,
@@ -42,6 +42,7 @@ export class CreateEquipmentUseCase {
           accessories,
           color,
           status,
+          companyId,
         },
       });
 

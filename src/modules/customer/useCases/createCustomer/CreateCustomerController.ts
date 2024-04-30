@@ -18,7 +18,7 @@ export class CreateCustomerController {
     try {
       const result = await createCustomerUseCase.execute({
         ...req.body,
-        userId: Number(companyId),
+        companyId: Number(companyId),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

@@ -14,16 +14,6 @@ export class CreateUserUseCase {
     password,
     userId,
   }: CreateUserDTO): Promise<HttpResponse<UserResponseDTO>> {
-    const checkUserExistence = await prisma.user.findFirst({
-      where: {
-        email,
-      },
-    });
-
-    if (Boolean(checkUserExistence)) {
-      return badRequest("E-mail já cadastrado");
-    }
-
     const admin = await prisma.user.findUnique({
       select: {
         id: true,
@@ -35,6 +25,16 @@ export class CreateUserUseCase {
 
     if (!admin) {
       return badRequest("Usuário não possui permissão");
+    }
+
+    const checkUserExistence = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (Boolean(checkUserExistence)) {
+      return badRequest("E-mail já cadastrado");
     }
 
     const hashedPassword = await bcrypt.hash(password, Number(saltOrRounds));

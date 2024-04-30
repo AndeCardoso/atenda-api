@@ -11,14 +11,14 @@ export class CreateEquipmentController {
     }
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const createEquipmentUseCase = new CreateEquipmentUseCase();
 
     try {
       const result = await createEquipmentUseCase.execute({
         ...req.body,
-        userId: Number(id),
+        companyId: Number(companyId),
       });
       return res.status(result.statusCode).json(result.body);
     } catch (error) {

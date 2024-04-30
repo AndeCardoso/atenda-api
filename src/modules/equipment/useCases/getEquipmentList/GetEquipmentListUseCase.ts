@@ -17,6 +17,7 @@ export class GetEquipmentListUseCase {
     order = orderEnum.ASC,
     column = equipmentColumnTypesEnum.NICKNAME,
     search,
+    companyId,
     customerId,
   }: GetEquipmentListRequestDTO): Promise<
     HttpResponse<IPaginationResponse<EquipmentResponseDTO>>
@@ -40,7 +41,8 @@ export class GetEquipmentListUseCase {
           updated_at: true,
         },
         where: {
-          customerId: customerId,
+          customerId,
+          companyId,
           nickname: {
             mode: "insensitive",
             contains: search,

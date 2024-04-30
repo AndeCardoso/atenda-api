@@ -7,6 +7,7 @@ import { EquipmentResponseDTO } from "@modules/equipment/dtos/EquipmentResponseD
 export class UpdateEquipmentUseCase {
   async execute(
     id: number,
+    companyId: number,
     data: CreateEquipmentDTO
   ): Promise<HttpResponse<EquipmentResponseDTO>> {
     try {
@@ -14,6 +15,7 @@ export class UpdateEquipmentUseCase {
         where: {
           id,
           customerId: data.customerId,
+          companyId,
         },
       });
 
@@ -22,7 +24,7 @@ export class UpdateEquipmentUseCase {
       }
 
       const equipment = await prisma.equipment.update({
-        where: { customerId: data.customerId, id },
+        where: { id, customerId: data.customerId, companyId },
         data: {
           nickname: data.nickname,
           brand: data.brand,
