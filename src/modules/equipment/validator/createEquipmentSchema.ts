@@ -3,31 +3,39 @@ import { checkSchema } from "express-validator";
 export const createEquipmentSchema = checkSchema({
   nickname: {
     optional: true,
+    isString: true,
   },
   brand: {
     notEmpty: true,
     optional: false,
+    isString: true,
     errorMessage: "Marca é obrigatório",
   },
   model: {
     notEmpty: true,
     optional: false,
+    isString: true,
     errorMessage: "Modelo é obrigatório",
   },
   description: {
     optional: true,
+    isString: true,
   },
   serialNumber: {
     optional: true,
+    isString: true,
   },
   voltage: {
     optional: true,
+    isString: true,
   },
   color: {
     optional: true,
+    isString: true,
   },
   accessories: {
     optional: true,
+    isString: true,
   },
   status: {
     notEmpty: true,
