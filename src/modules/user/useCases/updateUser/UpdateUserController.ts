@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { UpdateUserUseCase } from "./UpdateUserUseCase";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class UpdateUserController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }

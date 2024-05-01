@@ -19,7 +19,7 @@ export class GetTechnicianListUseCase {
     order = orderEnum.ASC,
     column = technicianColumnTypesEnum.NAME,
     search,
-    userId,
+    companyId,
   }: IPaginationParams<TTechnicianColumnTypes>): Promise<
     HttpResponse<IPaginationResponse<TechnicianResponseDTO>>
   > {
@@ -48,7 +48,7 @@ export class GetTechnicianListUseCase {
           updated_at: true,
         },
         where: {
-          userId,
+          companyId,
           name: {
             mode: "insensitive",
             contains: search,

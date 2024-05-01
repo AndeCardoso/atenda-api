@@ -2,18 +2,18 @@ import { Request, Response } from "express";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import { TTechnicianColumnTypes } from "../../constants/paramsType";
 import { GetTechnicianListUseCase } from "./GetTechnicianListUseCase";
-import { validationResult } from "express-validator";
+import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
 
 export class GetTechnicianListController {
   async handle(req: Request, res: Response) {
-    const errors = validationResult(req);
+    const errors: Result = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(new ParamsError(errors));
     }
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     const { page, limit, order, column, search } =
       req.query as IPaginationParams<TTechnicianColumnTypes>;
@@ -27,7 +27,7 @@ export class GetTechnicianListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
-        userId: Number(id),
+        companyId: Number(companyId),
       });
 
       return res.status(result.statusCode).json(result.body);

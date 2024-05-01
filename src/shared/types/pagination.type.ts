@@ -1,4 +1,4 @@
-export interface IPaginationParams<T> extends Partial<IUserRequest> {
+export interface IPaginationParams<T> extends Partial<ICompanyRequest> {
   page?: number;
   limit?: number;
   order?: TOrderTypes;
@@ -6,8 +6,9 @@ export interface IPaginationParams<T> extends Partial<IUserRequest> {
   search?: string;
 }
 
-export interface IUserRequest {
-  userId: number;
+export interface ICompanyRequest {
+  companyId: number;
+  userId?: number;
 }
 
 export type TOrderTypes = "asc" | "desc";

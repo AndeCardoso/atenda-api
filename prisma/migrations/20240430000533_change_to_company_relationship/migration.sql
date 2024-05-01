@@ -2,6 +2,7 @@
 CREATE TABLE "companies" (
     "id" SERIAL NOT NULL,
     "name" TEXT,
+    "document" TEXT NOT NULL,
     "status" INTEGER NOT NULL DEFAULT 1,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "recoverToken" TEXT,
     "admin" BOOLEAN NOT NULL DEFAULT false,
-    "companyId" INTEGER,
+    "companyId" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -33,7 +34,7 @@ CREATE TABLE "technicians" (
     "cpf" TEXT NOT NULL,
     "position" INTEGER NOT NULL,
     "addressId" INTEGER NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "companyId" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -50,7 +51,7 @@ CREATE TABLE "customers" (
     "secondPhone" TEXT,
     "email" TEXT NOT NULL,
     "addressesId" INTEGER[],
-    "userId" INTEGER NOT NULL,
+    "companyId" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -70,6 +71,7 @@ CREATE TABLE "equipments" (
     "voltage" TEXT,
     "color" TEXT,
     "accessories" TEXT,
+    "companyId" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -108,27 +110,33 @@ CREATE TABLE "serviceOrders" (
     "executedServices" TEXT,
     "observations" TEXT,
     "closed_at" TIMESTAMP(3),
-    "userId" INTEGER NOT NULL,
+    "companyId" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "serviceOrders_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateIndex
+CREATE UNIQUE INDEX "companies_document_key" ON "companies"("document");
+
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "technicians" ADD CONSTRAINT "technicians_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "technicians" ADD CONSTRAINT "technicians_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "technicians" ADD CONSTRAINT "technicians_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "customers" ADD CONSTRAINT "customers_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "customers" ADD CONSTRAINT "customers_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "equipments" ADD CONSTRAINT "equipments_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "customers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "equipments" ADD CONSTRAINT "equipments_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "serviceOrders" ADD CONSTRAINT "serviceOrders_technicianId_fkey" FOREIGN KEY ("technicianId") REFERENCES "technicians"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -143,4 +151,4 @@ ALTER TABLE "serviceOrders" ADD CONSTRAINT "serviceOrders_addressId_fkey" FOREIG
 ALTER TABLE "serviceOrders" ADD CONSTRAINT "serviceOrders_equipmentId_fkey" FOREIGN KEY ("equipmentId") REFERENCES "equipments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "serviceOrders" ADD CONSTRAINT "serviceOrders_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "serviceOrders" ADD CONSTRAINT "serviceOrders_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "companies"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

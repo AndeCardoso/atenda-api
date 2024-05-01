@@ -6,7 +6,7 @@ import { CustomerResponseDTO } from "@modules/customer/dtos/CustomerResponseDTO"
 export class GetCustomerByIdUseCase {
   async execute(
     id: number,
-    userId: number
+    companyId: number
   ): Promise<HttpResponse<CustomerResponseDTO>> {
     const customer = await prisma.customer.findUnique({
       select: {
@@ -20,7 +20,7 @@ export class GetCustomerByIdUseCase {
         addressesId: true,
         updated_at: true,
       },
-      where: { userId, id },
+      where: { companyId, id },
     });
 
     if (!customer) {

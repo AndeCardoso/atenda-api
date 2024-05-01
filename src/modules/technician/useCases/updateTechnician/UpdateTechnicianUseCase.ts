@@ -7,11 +7,11 @@ import { CreateTechnicianDTO } from "@modules/technician/dtos/CreateTechnicianDT
 export class UpdateTechnicianUseCase {
   async execute(
     id: number,
-    userId: number,
+    companyId: number,
     data: CreateTechnicianDTO
   ): Promise<HttpResponse<TechnicianResponseDTO>> {
     const technician = await prisma.technician.update({
-      where: { userId, id },
+      where: { companyId, id },
       data: {
         name: data.name,
         phone: data.phone,

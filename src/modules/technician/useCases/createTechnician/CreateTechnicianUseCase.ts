@@ -20,11 +20,11 @@ export class CreateTechnicianUseCase {
     district,
     state,
     city,
-    userId,
+    companyId,
   }: CreateTechnicianDTO): Promise<HttpResponse<TechnicianResponseDTO>> {
     const checkTechnicianExistence = await prisma.technician.findFirst({
       where: {
-        userId,
+        companyId,
         cpf,
       },
     });
@@ -55,7 +55,7 @@ export class CreateTechnicianUseCase {
           position,
           status: status ?? technicianStatusEnum.AVAILABLE,
           addressId: newAddress.id,
-          userId,
+          companyId,
         },
       });
 

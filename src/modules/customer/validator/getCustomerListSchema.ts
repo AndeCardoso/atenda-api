@@ -48,7 +48,7 @@ export const getCustomerListSchema = checkSchema({
     isIn: {
       options: [customerColumnArray],
       errorMessage:
-        "Nome de coluna inválida, escolha entre os campos retornados na lista de técnicos",
+        "Nome de coluna inválida, escolha entre os campos retornados na lista de clientes",
     },
   },
   filter: {

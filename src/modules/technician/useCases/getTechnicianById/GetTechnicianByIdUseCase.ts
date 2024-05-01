@@ -6,7 +6,7 @@ import { HttpResponse } from "@shared/protocols/http";
 export class GetTechnicianByIdUseCase {
   async execute(
     id: number,
-    userId: number
+    companyId: number
   ): Promise<HttpResponse<TechnicianResponseDTO>> {
     const technician = await prisma.technician.findUnique({
       select: {
@@ -29,7 +29,7 @@ export class GetTechnicianByIdUseCase {
         },
         updated_at: true,
       },
-      where: { userId, id },
+      where: { companyId, id },
     });
 
     if (!technician) {

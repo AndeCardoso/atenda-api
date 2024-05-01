@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "npx nodemon src/server.ts --watch",
-    "db": "docker compose up",
+    "db": "docker compose up -d",
     "update-migration": "npx prisma migrate dev --name",
     "compile": "npx tsc",
     "start": "node ./dist/server.js"

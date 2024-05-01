@@ -6,7 +6,7 @@ import {
   paginationResponseMount,
 } from "src/utils/paginationResponseMount";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
-import { contentNotFound, ok } from "@helper/http/httpHelper";
+import { badRequest, contentNotFound, ok } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 
 export class GetListUsersUseCase {
@@ -30,6 +30,10 @@ export class GetListUsersUseCase {
         },
         where: { id: userId, admin: true },
       });
+
+      if (!admin) {
+        return badRequest("Usuário não possui permissão");
+      }
 
       const users = await prisma.user.findMany({
         select: {

@@ -1,8 +1,8 @@
 import { address } from "@shared/types/address.type";
 import { customerStatusEnum } from "../constants";
-import { IUserRequest } from "@shared/types/pagination.type";
+import { ICompanyRequest } from "@shared/types/pagination.type";
 
-export interface CreateCustomerDTO extends IUserRequest {
+export interface CreateCustomerDTO extends ICompanyRequest {
   name: string;
   document: string;
   phone: string;

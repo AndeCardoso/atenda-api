@@ -6,10 +6,10 @@ export class AdvertiseController {
     const advertiseUseCase = new AdvertiseUseCase();
 
     const userPayload = req.headers.user as string;
-    const { id } = JSON.parse(userPayload!!);
+    const { companyId } = JSON.parse(userPayload!!);
 
     try {
-      const result = await advertiseUseCase.execute(id);
+      const result = await advertiseUseCase.execute(companyId);
       return res.status(result.statusCode).json(result.body);
     } catch (error) {
       console.log(JSON.stringify(error, null, 2));
