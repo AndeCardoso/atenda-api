@@ -11,6 +11,7 @@ import userRouter from "@modules/user/routers/UserRouters";
 import technicianRouter from "@modules/technician/routers/TechnicianRouters";
 import customerRouter from "@modules/customer/routers/CustomerRouters";
 import equipmentRouter from "@modules/equipment/routers/EquipmentRouters";
+import serviceOrderRouter from "@modules/serviceOrder/routers/ServiceOrderRouters";
 
 import { swaggerOptions } from "src/documentation/swaggerOptions";
 
@@ -27,3 +28,4 @@ globalRouter.use("/user/", tokenValidation, userRouter);
 globalRouter.use("/technician/", tokenValidation, technicianRouter);
 globalRouter.use("/customer/", tokenValidation, customerRouter);
 globalRouter.use("/equipment/", tokenValidation, equipmentRouter);
+globalRouter.use("/serviceOrder/", tokenValidation, serviceOrderRouter);
