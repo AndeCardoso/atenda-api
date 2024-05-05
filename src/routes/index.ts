@@ -19,7 +19,7 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 export const globalRouter = express.Router();
 
-globalRouter.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+globalRouter.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 globalRouter.use("/company/", companyRouter);
 globalRouter.use("/auth/", authRouter);
 
@@ -28,4 +28,4 @@ globalRouter.use("/user/", tokenValidation, userRouter);
 globalRouter.use("/technician/", tokenValidation, technicianRouter);
 globalRouter.use("/customer/", tokenValidation, customerRouter);
 globalRouter.use("/equipment/", tokenValidation, equipmentRouter);
-globalRouter.use("/serviceOrder/", tokenValidation, serviceOrderRouter);
+globalRouter.use("/service-order/", tokenValidation, serviceOrderRouter);
