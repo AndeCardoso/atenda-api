@@ -101,7 +101,7 @@ export const createServiceOrderSchema = checkSchema({
             );
           }
         }
-        if (value > 0) {
+        if (value <= 0) {
           throw new Error("O número Id deve ser maior que zero");
         }
         return true;

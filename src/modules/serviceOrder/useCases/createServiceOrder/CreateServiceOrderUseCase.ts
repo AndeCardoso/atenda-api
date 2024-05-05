@@ -35,9 +35,9 @@ export class CreateServiceOrderUseCase {
     city,
   }: CreateServiceOrderDTO): Promise<HttpResponse<ServiceOrderResponseDTO>> {
     try {
-      let newAddress;
+      let address;
       if (!addressId) {
-        newAddress = await prisma.address.create({
+        address = await prisma.address.create({
           data: {
             nickname,
             cep: cep!!,
@@ -49,11 +49,26 @@ export class CreateServiceOrderUseCase {
             city: city!!,
           },
         });
+      } else {
+        address = await prisma.address.findUnique({
+          select: {
+            id: true,
+            nickname: true,
+            cep: true,
+            complement: true,
+            district: true,
+            street: true,
+            number: true,
+            state: true,
+            city: true,
+          },
+          where: {
+            id: addressId,
+          },
+        });
       }
 
-      const newAddressId = addressId || newAddress?.id;
-
-      if (!newAddressId) {
+      if (!address) {
         return badRequest(
           "Endereço é obrigatório para cadastro de ordem de serviço"
         );
@@ -68,7 +83,6 @@ export class CreateServiceOrderUseCase {
           secondPhone: true,
           email: true,
           status: true,
-          addressesId: true,
           updated_at: true,
         },
         where: { companyId, id: customerId },
@@ -128,7 +142,7 @@ export class CreateServiceOrderUseCase {
           customerId,
           equipmentId,
           technicianId,
-          addressId: newAddressId,
+          addressId: address.id,
           closed_at: closedAt,
           companyId,
         },
@@ -143,16 +157,7 @@ export class CreateServiceOrderUseCase {
         executedServices: newServiceOrder.executedServices,
         observations: newServiceOrder.observations,
         status: newServiceOrder.status,
-        address: {
-          nickname: newAddress?.nickname,
-          cep: newAddress?.cep,
-          district: newAddress?.district,
-          street: newAddress?.state,
-          number: newAddress?.number,
-          complement: newAddress?.complement ?? null,
-          state: newAddress?.state,
-          city: newAddress?.city,
-        },
+        address,
         customer,
         equipment,
         technician,

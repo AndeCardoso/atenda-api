@@ -38,6 +38,8 @@ export class GetServiceOrderListUseCase {
           status: true,
           address: {
             select: {
+              id: true,
+              nickname: true,
               cep: true,
               complement: true,
               district: true,
