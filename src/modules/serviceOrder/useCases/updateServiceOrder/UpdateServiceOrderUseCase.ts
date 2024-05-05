@@ -26,28 +26,76 @@ export class UpdateServiceOrderUseCase {
         addressId: data.addressId,
         closed_at: data.closedAt,
       },
-    });
-
-    const serviceOrderAddress = await prisma.address.update({
-      where: { id: serviceOrder.addressId },
-      data: {
-        street: data.street,
-        number: data.number,
-        complement: data.complement,
-        district: data.district,
-        cep: data.cep,
-        state: data.state,
-        city: data.city,
+      select: {
+        id: true,
+        selectedVoltage: true,
+        reportedDefect: true,
+        foundDefect: true,
+        orderedServices: true,
+        executedServices: true,
+        observations: true,
+        status: true,
+        address: {
+          select: {
+            id: true,
+            nickname: true,
+            cep: true,
+            complement: true,
+            district: true,
+            street: true,
+            number: true,
+            state: true,
+            city: true,
+          },
+        },
+        customer: {
+          select: {
+            id: true,
+            name: true,
+            document: true,
+            phone: true,
+            secondPhone: true,
+            email: true,
+            status: true,
+            updated_at: true,
+          },
+        },
+        equipment: {
+          select: {
+            id: true,
+            nickname: true,
+            brand: true,
+            model: true,
+            description: true,
+            serialNumber: true,
+            voltage: true,
+            accessories: true,
+            color: true,
+            status: true,
+            updated_at: true,
+          },
+        },
+        technician: {
+          select: {
+            id: true,
+            name: true,
+            cpf: true,
+            phone: true,
+            status: true,
+            position: true,
+            updated_at: true,
+          },
+        },
+        closed_at: true,
+        updated_at: true,
+        created_at: true,
       },
     });
 
     if (!serviceOrder) {
-      return contentNotFound("Técnico");
+      return contentNotFound("Ordem de serviço");
     }
 
-    return ok({
-      ...serviceOrder,
-      address: serviceOrderAddress,
-    });
+    return ok(serviceOrder);
   }
 }
