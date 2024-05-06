@@ -6,7 +6,7 @@ import {
 import { orderEnum } from "@shared/types/pagination.type";
 import { serviceOrderColumnTypesEnum } from "../../constants/paramsType";
 import { ServiceOrderResponseDTO } from "@modules/serviceOrder/dtos/ServiceOrderResponseDTO";
-import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { IPaginationSOParams } from "@modules/serviceOrder/dtos/ServiceOrderListDTO";
 

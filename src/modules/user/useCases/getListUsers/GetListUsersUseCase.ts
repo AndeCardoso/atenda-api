@@ -4,7 +4,7 @@ import { TUserColumnTypes, userColumnTypesEnum } from "./paramsType";
 import {
   IPaginationResponse,
   paginationResponseMount,
-} from "src/utils/paginationResponseMount";
+} from "@utils/paginationResponseMount";
 import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
 import { badRequest, contentNotFound, ok } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";

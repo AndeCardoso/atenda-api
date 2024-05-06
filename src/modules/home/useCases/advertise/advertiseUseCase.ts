@@ -3,7 +3,7 @@ import { ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { differenceInDays } from "date-fns";
 import { AdvertiseResponseDTO } from "@modules/home/dtos/advertise/AdvertiseResponseDTO";
-import { DAY_TRIAL_EXPIRATION } from "src/config/access";
+import { DAY_TRIAL_EXPIRATION } from "config/access";
 
 export class AdvertiseUseCase {
   async execute(id: number): Promise<HttpResponse<AdvertiseResponseDTO>> {

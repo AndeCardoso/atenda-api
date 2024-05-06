@@ -8,7 +8,7 @@ import {
   TCustomerColumnTypes,
   customerColumnTypesEnum,
 } from "../../constants/paramsType";
-import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { CustomerResponseDTO } from "@modules/customer/dtos/CustomerResponseDTO";
 import { address } from "@shared/types/address.type";
