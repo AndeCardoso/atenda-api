@@ -8,8 +8,20 @@
     "dev": "npx nodemon --exec 'ts-node -r tsconfig-paths/register' src/server.ts --watch",
     "db": "docker compose up -d",
     "update-migration": "npx prisma migrate dev --name",
-    "compile": "npx tsc",
-    "start": "ts-node -r tsconfig-paths/register ./dist/server.js"
+    "compile": "npx tsc && cp -R src/services/Nodemailer/templates/recoverMail/recover.ejs dist/services/Nodemailer/templates/recoverMail/",
+    "start": "node ./dist/server.js"
+  },
+  "_moduleAliases": {
+    "@helper": "dist/helper",
+    "@errors": "dist/errors",
+    "@middlewares": "dist/middlewares",
+    "@modules": "dist/modules",
+    "@services": "dist/services",
+    "@prismaClient": "dist/prismaClient",
+    "@shared": "dist/shared",
+    "@utils": "dist/utils",
+    "@config": "dist/config",
+    "@documentation": "dist/documentation"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",
@@ -23,6 +35,7 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.9"
   },
