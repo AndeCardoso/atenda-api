@@ -12,7 +12,7 @@ import technicianRouter from "@modules/technician/routers/TechnicianRouters";
 import customerRouter from "@modules/customer/routers/CustomerRouters";
 import equipmentRouter from "@modules/equipment/routers/EquipmentRouters";
 
-import { swaggerOptions } from "src/documentation/swaggerOptions";
+import { swaggerOptions } from "@documentation/swaggerOptions";
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
