@@ -9,7 +9,7 @@ import {
   technicianColumnTypesEnum,
 } from "../../constants/paramsType";
 import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
-import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 
 export class GetTechnicianListUseCase {

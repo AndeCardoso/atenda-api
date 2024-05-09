@@ -5,7 +5,7 @@ import {
 } from "@utils/paginationResponseMount";
 import { orderEnum } from "@shared/types/pagination.type";
 import { equipmentColumnTypesEnum } from "../../constants/paramsType";
-import { contentNotFound, ok, serverError } from "src/helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { EquipmentResponseDTO } from "@modules/equipment/dtos/EquipmentResponseDTO";
 import { GetEquipmentListRequestDTO } from "@modules/equipment/dtos/GetEquipmentListRequestDTO";
