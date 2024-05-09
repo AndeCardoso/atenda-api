@@ -7,8 +7,8 @@ import { AuthResponseDTO } from "@modules/auth/dtos/auth/AuthResponseDTO";
 import { badRequest, ok, unauthorized } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { companyStatusEnum } from "@modules/company/constants";
+import { DAY_TRIAL_EXPIRATION } from "@config/access";
 import { differenceInDays } from "date-fns";
-import { DAY_TRIAL_EXPIRATION } from "config/access";
 
 const secretKey = process.env.SECRET_KEY_JWT as jwt.Secret;
 const accessExpireTime = process.env.ACCESS_EXPIRE_TIME as jwt.Secret;
