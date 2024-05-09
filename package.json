@@ -5,11 +5,11 @@
   "author": "Anderson Cardoso",
   "license": "MIT",
   "scripts": {
-    "dev": "npx nodemon src/server.ts --watch",
+    "dev": "npx nodemon --exec 'ts-node -r tsconfig-paths/register' src/server.ts --watch",
     "db": "docker compose up -d",
     "update-migration": "npx prisma migrate dev --name",
     "compile": "npx tsc",
-    "start": "node ./dist/server.js"
+    "start": "ts-node -r tsconfig-paths/register ./dist/server.js"
   },
   "dependencies": {
     "@prisma/client": "^5.8.1",
