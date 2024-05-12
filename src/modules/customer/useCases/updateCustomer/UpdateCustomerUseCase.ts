@@ -25,6 +25,23 @@ export class UpdateCustomerUseCase {
 
       const updatedAddresses: address[] = [];
       const updatedAddressIds: number[] = currentCustomer.addressesId ?? [];
+
+      const paramsIdList = data.addresses.map((address) => Number(address.id));
+
+      const fixedIdList = [];
+
+      for (const id of updatedAddressIds) {
+        if (!paramsIdList.some((item) => item === id)) {
+          await prisma.address.delete({
+            where: {
+              id,
+            },
+          });
+        } else {
+          fixedIdList.push(id);
+        }
+      }
+
       for (const [index, address] of data.addresses.entries()) {
         const {
           nickname,
@@ -51,57 +68,26 @@ export class UpdateCustomerUseCase {
             },
           });
           updatedAddresses.push(newAddress);
-          updatedAddressIds.push(newAddress.id);
-          continue;
-        }
-
-        const updatedAddress = await prisma.address.update({
-          where: {
-            id: Number(address.id),
-          },
-          data: {
-            nickname,
-            cep,
-            street,
-            number,
-            complement,
-            district,
-            state,
-            city,
-          },
-        });
-        updatedAddresses.push(updatedAddress);
-      }
-
-      const currentIdList = currentCustomer.addressesId;
-      const newIdList = data.addresses.map((address) =>
-        address.id ? Number(address.id) : null
-      );
-
-      const newAddressesIdList: number[] = [];
-
-      const addressIdsToDelete = Boolean(currentIdList)
-        ? currentIdList.filter((curId) => {
-            if (newIdList[0] !== null && newIdList.indexOf(curId) == -1) {
-              return curId;
-            } else {
-              newAddressesIdList.push(curId);
-            }
-          })
-        : undefined;
-
-      if (addressIdsToDelete && addressIdsToDelete.length > 0) {
-        for (const addressIdToDelete of addressIdsToDelete) {
-          await prisma.address.delete({
+          fixedIdList.push(newAddress.id);
+        } else {
+          const updatedAddress = await prisma.address.update({
             where: {
-              id: addressIdToDelete,
+              id: Number(address.id),
+            },
+            data: {
+              nickname,
+              cep,
+              street,
+              number,
+              complement,
+              district,
+              state,
+              city,
             },
           });
+          updatedAddresses.push(updatedAddress);
         }
       }
-
-      const updatedAddressIdList =
-        newAddressesIdList.length > 0 ? newAddressesIdList : updatedAddressIds;
 
       const customer = await prisma.customer.update({
         where: { companyId, id },
@@ -112,7 +98,7 @@ export class UpdateCustomerUseCase {
           secondPhone: data.secondPhone,
           email: data.email,
           status: data.status,
-          addressesId: [...updatedAddressIdList],
+          addressesId: fixedIdList,
         },
       });
 
