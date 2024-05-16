@@ -2,10 +2,10 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "rootDir": "./src/",
-    "outDir": "./dist/",
     "moduleResolution": "node",
-    "baseUrl": ".",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "outDir": "./dist",
     "paths": {
       "@helper/*": ["helper/*"],
       "@errors/*": ["errors/*"],
@@ -23,6 +23,7 @@
     "strict": true,
     "skipLibCheck": true,
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
   "ts-node": { "transpileOnly": true, "require": ["tsconfig-paths/register"] }
 }
