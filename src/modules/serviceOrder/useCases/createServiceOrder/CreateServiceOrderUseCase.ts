@@ -43,12 +43,32 @@ export class CreateServiceOrderUseCase {
             cep: cep!!,
             street: street!!,
             number: number!!,
-            complement: complement!!,
+            complement,
             district: district!!,
             state: state!!,
             city: city!!,
           },
         });
+
+        const customer = await prisma.customer.findUnique({
+          where: { companyId, id: customerId },
+          select: {
+            id: true,
+            addressesId: true,
+          },
+        });
+
+        if (customer) {
+          const concatAddressesId = [...customer.addressesId];
+          concatAddressesId.push(address.id);
+
+          await prisma.customer.update({
+            where: { companyId, id: customer.id },
+            data: {
+              addressesId: concatAddressesId,
+            },
+          });
+        }
       } else {
         address = await prisma.address.findUnique({
           select: {
@@ -83,6 +103,7 @@ export class CreateServiceOrderUseCase {
           secondPhone: true,
           email: true,
           status: true,
+          addressesId: true,
           updated_at: true,
         },
         where: { companyId, id: customerId },
