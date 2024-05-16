@@ -16,6 +16,7 @@ export class GetServiceOrderListUseCase {
     limit = 20,
     order = orderEnum.ASC,
     column = serviceOrderColumnTypesEnum.ID,
+    search,
     customer,
     equipment,
     technician,
@@ -96,6 +97,12 @@ export class GetServiceOrderListUseCase {
           customerId: customer,
           equipmentId: equipment,
           technicianId: technician,
+          customer: {
+            name: {
+              mode: "insensitive",
+              contains: search,
+            },
+          },
         },
         orderBy: { [column]: order },
         take: limit,
