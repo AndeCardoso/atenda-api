@@ -15,6 +15,7 @@ export class GetListUsersUseCase {
     limit = 20,
     order = orderEnum.ASC,
     column = userColumnTypesEnum.NAME,
+    search,
     userId,
   }: IPaginationParams<TUserColumnTypes>): Promise<
     HttpResponse<IPaginationResponse<UserResponseDTO>>
@@ -43,7 +44,13 @@ export class GetListUsersUseCase {
           admin: true,
           updated_at: true,
         },
-        where: { companyId: admin?.companyId },
+        where: {
+          companyId: admin?.companyId,
+          name: {
+            mode: "insensitive",
+            contains: search,
+          },
+        },
         orderBy: { [column]: order },
         take: limit,
         skip: offset,
