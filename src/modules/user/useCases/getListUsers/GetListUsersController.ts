@@ -12,7 +12,7 @@ export class GetListUsersController {
       return res.status(400).json(new ParamsError(errors));
     }
 
-    const { page, limit, order, column } =
+    const { page, limit, order, column, search } =
       req.query as IPaginationParams<TUserColumnTypes>;
 
     const userPayload = req.headers.user as string;
@@ -26,6 +26,7 @@ export class GetListUsersController {
         limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "name",
+        search,
         userId: id,
       });
       return res.status(result.statusCode).json(result.body);
