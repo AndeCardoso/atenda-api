@@ -1,5 +1,5 @@
 import { prisma } from "@prismaClient/client";
-import { ok, serverError } from "@helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { differenceInDays } from "date-fns";
 import { AdvertiseResponseDTO } from "@modules/home/dtos/advertise/AdvertiseResponseDTO";
@@ -25,6 +25,10 @@ export class AdvertiseUseCase {
 
     if (!company) {
       return serverError("Erro inesperado");
+    }
+
+    if (company.status === 2) {
+      return contentNotFound("Alerta");
     }
 
     const remainDays =
