@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { prisma } from "@prismaClient/client";
 import { AuthRequestDTO } from "@modules/auth/dtos/auth/AuthRequestDTO";
 import { AuthResponseDTO } from "@modules/auth/dtos/auth/AuthResponseDTO";
-import { badRequest, ok, unauthorized } from "@helper/http/httpHelper";
+import { forbidden, ok, unauthorized } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { companyStatusEnum } from "@modules/company/constants";
 import { DAY_TRIAL_EXPIRATION } from "@config/access";
@@ -25,13 +25,13 @@ export class AuthUseCase {
     });
 
     if (!user) {
-      return badRequest("E-mail ou senha inválida");
+      return unauthorized("E-mail ou senha inválida");
     }
 
     const match = await bcrypt.compare(password, user?.password);
 
     if (!match) {
-      return badRequest("E-mail ou senha inválida");
+      return unauthorized("E-mail ou senha inválida");
     }
 
     const company = await prisma.company.findFirst({
@@ -41,7 +41,7 @@ export class AuthUseCase {
     });
 
     if (company?.status === companyStatusEnum.BLOCKED) {
-      return unauthorized(
+      return forbidden(
         "Usuário bloqueado, entre em contato com o Sistema Atenda para reativar sua conta"
       );
     }
@@ -59,8 +59,8 @@ export class AuthUseCase {
             status: companyStatusEnum.BLOCKED,
           },
         });
-        return unauthorized(
-          "Licensa gratuita encerrada, entre em contato com o Sistema Atenda para reativar sua conta"
+        return forbidden(
+          "Licença gratuita encerrada, entre em contato com o Sistema Atenda para reativar sua conta"
         );
       }
     }
