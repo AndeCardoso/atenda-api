@@ -10,6 +10,7 @@ import { GetServiceOrderByIdController } from "../useCases/getServiceOrderById/G
 import { CreateServiceOrderController } from "../useCases/createServiceOrder/CreateServiceOrderController";
 import { UpdateServiceOrderController } from "../useCases/updateServiceOrder/UpdateServiceOrderController";
 import { AttachSignatureController } from "../useCases/attachSignature/AttachSignatureController";
+import uploadMiddleware from "@middlewares/fileMiddleware";
 
 const serviceOrderRouter = express.Router();
 
@@ -403,7 +404,8 @@ serviceOrderRouter.post(
  *                   type: string
  */
 serviceOrderRouter.post(
-  "/signature",
+  "/signature/:id",
+  uploadMiddleware,
   attachSignatureSchema,
   attachSignatureController.handle
 );

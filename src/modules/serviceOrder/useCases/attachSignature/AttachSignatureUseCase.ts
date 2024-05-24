@@ -13,10 +13,20 @@ export class AttachSignatureUseCase {
   async execute({
     serviceOrderId,
     signatureImage,
+    companyId,
   }: AttachSignatureDTO): Promise<HttpResponse<AttachSignatureResponseDTO>> {
     try {
-      console.log({ serviceOrderId, signatureImage });
-      return created({ url: "http://issoeumteste.com/image-de-teste.jpeg" });
+      // const serviceOrder = await prisma.serviceOrder.update({
+      //   where: { companyId, id: serviceOrderId },
+      //   data: {
+      //     signature: signatureImage.path,
+      //   },
+      //   select: {
+      //     signature: true,
+      //   },
+      // });
+
+      return created({ url: signatureImage.path });
     } catch (error) {
       return serverError(error);
     }
