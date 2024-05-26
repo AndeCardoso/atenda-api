@@ -3,11 +3,14 @@ import express from "express";
 import { getServiceOrderListSchema } from "../validator/getServiceOrderListSchema";
 import { getServiceOrderByIdSchema } from "../validator/getServiceOrderByIdSchema";
 import { createServiceOrderSchema } from "../validator/createServiceOrderSchema";
+import { attachSignatureSchema } from "../validator/attachSignatureSchema";
 
 import { GetServiceOrderListController } from "../useCases/getServiceOrderList/GetServiceOrderListController";
 import { GetServiceOrderByIdController } from "../useCases/getServiceOrderById/GetServiceOrderByIdController";
 import { CreateServiceOrderController } from "../useCases/createServiceOrder/CreateServiceOrderController";
 import { UpdateServiceOrderController } from "../useCases/updateServiceOrder/UpdateServiceOrderController";
+import { AttachSignatureController } from "../useCases/attachSignature/AttachSignatureController";
+import uploadMiddleware from "@middlewares/fileMiddleware";
 
 const serviceOrderRouter = express.Router();
 
@@ -15,6 +18,7 @@ const getServiceOrderListController = new GetServiceOrderListController();
 const getServiceOrderByIdController = new GetServiceOrderByIdController();
 const createServiceOrderController = new CreateServiceOrderController();
 const updateServiceOrderController = new UpdateServiceOrderController();
+const attachSignatureController = new AttachSignatureController();
 
 /**
  * @swagger
@@ -366,6 +370,44 @@ serviceOrderRouter.post(
   "/",
   createServiceOrderSchema,
   createServiceOrderController.handle
+);
+
+/**
+ * @swagger
+ * /serviceOrder/signature:
+ *   post:
+ *     summary: Anexo de assinatura do cliente na O.S.
+ *     tags: [ServiceOrder]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               signatureImage:
+ *                 type: string
+ *               serviceOrderId:
+ *                 type: integer
+ *             required:
+ *               - signatureImage
+ *               - serviceOrderId
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ */
+serviceOrderRouter.post(
+  "/signature/:id",
+  uploadMiddleware,
+  attachSignatureSchema,
+  attachSignatureController.handle
 );
 
 export default serviceOrderRouter;

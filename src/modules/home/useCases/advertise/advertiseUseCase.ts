@@ -1,30 +1,25 @@
 import { prisma } from "@prismaClient/client";
-import { ok, serverError } from "@helper/http/httpHelper";
+import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { differenceInDays } from "date-fns";
 import { AdvertiseResponseDTO } from "@modules/home/dtos/advertise/AdvertiseResponseDTO";
 import { DAY_TRIAL_EXPIRATION } from "@config/access";
+import { companyStatusEnum } from "@modules/company/constants";
 
 export class AdvertiseUseCase {
   async execute(id: number): Promise<HttpResponse<AdvertiseResponseDTO>> {
-    const user = await prisma.user.findFirst({
+    const company = await prisma.company.findFirst({
       where: {
         id,
       },
     });
 
-    if (!user) {
+    if (!company) {
       return serverError("Erro inesperado");
     }
 
-    const company = await prisma.company.findFirst({
-      where: {
-        id: user.companyId,
-      },
-    });
-
-    if (!company) {
-      return serverError("Erro inesperado");
+    if (company.status === companyStatusEnum.OK) {
+      return contentNotFound("Alerta");
     }
 
     const remainDays =

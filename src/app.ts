@@ -15,5 +15,5 @@ app.use(express.json());
 app.use("/api", globalRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.send("Atenda server");
+  res.status(404).json("Rota não encontrada");
 });
