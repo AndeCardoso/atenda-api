@@ -36,6 +36,10 @@ export class GetServiceOrderListUseCase {
           orderedServices: true,
           executedServices: true,
           observations: true,
+          signatureUrl: true,
+          opened_at: true,
+          closed_at: true,
+          totalValue: true,
           status: true,
           address: {
             select: {
@@ -88,7 +92,6 @@ export class GetServiceOrderListUseCase {
               updated_at: true,
             },
           },
-          closed_at: true,
           updated_at: true,
           created_at: true,
         },

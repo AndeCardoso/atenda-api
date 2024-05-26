@@ -20,10 +20,8 @@ export class UpdateServiceOrderUseCase {
         orderedServices: data.orderedServices,
         executedServices: data.executedServices,
         observations: data.observations,
-        customerId: data.customerId,
-        equipmentId: data.equipmentId,
+        totalValue: data.totalValue,
         technicianId: data.technicianId,
-        addressId: data.addressId,
         closed_at: data.closedAt,
       },
       select: {
@@ -34,6 +32,10 @@ export class UpdateServiceOrderUseCase {
         orderedServices: true,
         executedServices: true,
         observations: true,
+        signatureUrl: true,
+        totalValue: true,
+        opened_at: true,
+        closed_at: true,
         status: true,
         address: {
           select: {
@@ -86,7 +88,6 @@ export class UpdateServiceOrderUseCase {
             updated_at: true,
           },
         },
-        closed_at: true,
         updated_at: true,
         created_at: true,
       },

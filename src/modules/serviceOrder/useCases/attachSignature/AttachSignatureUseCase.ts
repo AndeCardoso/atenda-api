@@ -16,15 +16,19 @@ export class AttachSignatureUseCase {
     companyId,
   }: AttachSignatureDTO): Promise<HttpResponse<AttachSignatureResponseDTO>> {
     try {
-      // const serviceOrder = await prisma.serviceOrder.update({
-      //   where: { companyId, id: serviceOrderId },
-      //   data: {
-      //     signature: signatureImage.path,
-      //   },
-      //   select: {
-      //     signature: true,
-      //   },
-      // });
+      const serviceOrder = await prisma.serviceOrder.update({
+        where: { companyId, id: serviceOrderId },
+        data: {
+          signatureUrl: signatureImage.path,
+        },
+        select: {
+          signatureUrl: true,
+        },
+      });
+
+      if (!serviceOrder) {
+        return badRequest("Ordem de serviço não encontrado");
+      }
 
       return created({ url: signatureImage.path });
     } catch (error) {
