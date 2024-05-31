@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IPaginationParams, orderEnum } from "@shared/types/pagination.type";
-import { TServiceOrderColumnTypes } from "../../constants/paramsType";
+import { orderEnum } from "@shared/types/pagination.type";
 import { GetServiceOrderListUseCase } from "./GetServiceOrderListUseCase";
 import { Result, validationResult } from "express-validator";
 import { ParamsError } from "@errors/ParamError";
+import { IPaginationSOParams } from "@modules/serviceOrder/dtos/ServiceOrderListDTO";
 
 export class GetServiceOrderListController {
   async handle(req: Request, res: Response) {
@@ -15,8 +15,16 @@ export class GetServiceOrderListController {
     const userPayload = req.headers.user as string;
     const { companyId } = JSON.parse(userPayload!!);
 
-    const { page, limit, order, column, search } =
-      req.query as IPaginationParams<TServiceOrderColumnTypes>;
+    const {
+      page,
+      limit,
+      order,
+      column,
+      search,
+      customer,
+      equipment,
+      technician,
+    } = req.query as IPaginationSOParams;
 
     const getAllServiceOrdersUseCase = new GetServiceOrderListUseCase();
 
@@ -28,6 +36,9 @@ export class GetServiceOrderListController {
         column: column || "id",
         search: search,
         companyId: Number(companyId),
+        customer: customer ? Number(customer) : undefined,
+        equipment: equipment ? Number(equipment) : undefined,
+        technician: technician ? Number(technician) : undefined,
       });
 
       return res.status(result.statusCode).json(result.body);

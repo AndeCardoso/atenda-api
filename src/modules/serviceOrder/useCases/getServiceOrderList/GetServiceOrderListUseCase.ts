@@ -112,7 +112,7 @@ export class GetServiceOrderListUseCase {
         skip: offset,
       });
 
-      const totalServiceOrders = await prisma.serviceOrder.count();
+      const totalServiceOrders = serviceOrders.length;
 
       if (serviceOrders.length === 0) {
         return contentNotFound("Ordens de serviço");
