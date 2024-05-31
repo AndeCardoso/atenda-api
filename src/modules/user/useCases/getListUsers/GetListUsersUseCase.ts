@@ -56,7 +56,7 @@ export class GetListUsersUseCase {
         skip: offset,
       });
 
-      const totalUsers = await prisma.user.count();
+      const totalUsers = users.length;
 
       if (users.length === 0) {
         return contentNotFound("Usuário");

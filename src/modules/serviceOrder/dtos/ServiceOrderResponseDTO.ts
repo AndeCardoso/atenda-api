@@ -3,6 +3,7 @@ import { serviceOrderStatusEnum } from "../constants";
 import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
 import { CustomerResponseDTO } from "@modules/customer/dtos/CustomerResponseDTO";
 import { EquipmentResponseDTO } from "@modules/equipment/dtos/EquipmentResponseDTO";
+import { Decimal } from "@prisma/client/runtime/library";
 
 export interface ServiceOrderResponseDTO {
   id: number;
@@ -12,12 +13,15 @@ export interface ServiceOrderResponseDTO {
   orderedServices: string;
   executedServices?: string | null;
   observations?: string | null;
+  opened_at: Date;
+  closed_at?: Date | null;
+  totalValue?: number | Decimal | null;
+  signatureUrl?: string | null;
   status: serviceOrderStatusEnum;
   technician: Partial<CustomerResponseDTO>;
   customer: Partial<TechnicianResponseDTO>;
   equipment: Partial<EquipmentResponseDTO>;
   address: Partial<address>;
-  closed_at?: Date | null;
   updated_at: Date;
   created_at: Date;
 }

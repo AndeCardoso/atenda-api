@@ -59,7 +59,7 @@ export class GetTechnicianListUseCase {
         skip: offset,
       });
 
-      const totalTechnicians = await prisma.technician.count();
+      const totalTechnicians = technicians.length;
 
       if (technicians.length === 0) {
         return contentNotFound("Técnicos");

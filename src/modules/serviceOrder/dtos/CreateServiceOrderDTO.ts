@@ -11,7 +11,10 @@ export interface CreateServiceOrderDTO
   orderedServices: string;
   executedServices?: string;
   observations?: string;
-  closedAt: Date;
+  openedAt: Date;
+  closedAt?: Date;
+  totalValue?: number;
+  signatureUrl?: string;
   status?: serviceOrderStatusEnum;
   addressId?: number;
   equipmentId: number;

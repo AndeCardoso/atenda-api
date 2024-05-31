@@ -35,11 +35,20 @@ export const createServiceOrderSchema = checkSchema({
     optional: true,
     isString: true,
   },
+  openedAt: {
+    notEmpty: {
+      errorMessage: "Data de abertura é obrigatório",
+    },
+    optional: false,
+  },
   closedAt: {
     notEmpty: false,
     optional: true,
-    isDate: true,
-    errorMessage: "Data de finalização precisa ser do tipo Date",
+  },
+  signatureUrl: {
+    notEmpty: false,
+    optional: true,
+    isString: true,
   },
   customerId: {
     notEmpty: true,

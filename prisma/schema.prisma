@@ -132,7 +132,10 @@ model ServiceOrder {
   orderedServices  String
   executedServices String?
   observations     String?
+  opened_at        DateTime
   closed_at        DateTime?
+  totalValue       Decimal?
+  signatureUrl     String?
   company          Company?   @relation(fields: [companyId], references: [id])
   companyId        Int
   created_at       DateTime   @default(now())
