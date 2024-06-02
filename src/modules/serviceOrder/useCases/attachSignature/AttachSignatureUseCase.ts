@@ -1,10 +1,5 @@
 import { prisma } from "@prismaClient/client";
-import {
-  badRequest,
-  contentNotFound,
-  created,
-  serverError,
-} from "@helper/http/httpHelper";
+import { contentNotFound, created, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { AttachSignatureDTO } from "@modules/serviceOrder/dtos/AttachSignatureDTO";
 import { AttachSignatureResponseDTO } from "@modules/serviceOrder/dtos/AttachSignatureResponseDTO";
@@ -27,7 +22,7 @@ export class AttachSignatureUseCase {
       });
 
       if (!serviceOrder) {
-        return badRequest("Ordem de serviço não encontrado");
+        return contentNotFound("Ordem de serviço");
       }
 
       return created({ url: signatureImage.path });
