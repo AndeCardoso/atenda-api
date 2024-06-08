@@ -10,6 +10,7 @@ import { GetServiceOrderByIdController } from "../useCases/getServiceOrderById/G
 import { CreateServiceOrderController } from "../useCases/createServiceOrder/CreateServiceOrderController";
 import { UpdateServiceOrderController } from "../useCases/updateServiceOrder/UpdateServiceOrderController";
 import { AttachSignatureController } from "../useCases/attachSignature/AttachSignatureController";
+import { GetPdfReportController } from "../useCases/getPdfReport/GetPdfReportController";
 import { uploadMiddleware, upload } from "@middlewares/uploadMiddleware";
 
 const serviceOrderRouter = express.Router();
@@ -19,6 +20,7 @@ const getServiceOrderByIdController = new GetServiceOrderByIdController();
 const createServiceOrderController = new CreateServiceOrderController();
 const updateServiceOrderController = new UpdateServiceOrderController();
 const attachSignatureController = new AttachSignatureController();
+const getPdfReportController = new GetPdfReportController();
 
 /**
  * @swagger
@@ -29,7 +31,7 @@ const attachSignatureController = new AttachSignatureController();
 
 /**
  * @swagger
- * /serviceOrder/list:
+ * /api/service-order/list:
  *   get:
  *     summary: Lista de ordens de serviço
  *     tags: [ServiceOrder]
@@ -109,7 +111,7 @@ serviceOrderRouter.get(
 
 /**
  * @swagger
- * /serviceOrder/{id}:
+ * /api/service-order/{id}:
  *   get:
  *     summary: Busca de ordem de serviço por Id
  *     tags: [ServiceOrder]
@@ -172,7 +174,38 @@ serviceOrderRouter.get(
 
 /**
  * @swagger
- * /serviceOrder/{id}:
+ * /api/service-order/report/{id}:
+ *   get:
+ *     summary: Emição de relatório da ordem de serviço
+ *     tags: [ServiceOrder]
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Numero de identificação da ordem de serviço
+ *         in: path
+ *         required: true
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ */
+serviceOrderRouter.get(
+  "/report/:id",
+  getServiceOrderByIdSchema,
+  getPdfReportController.handle
+);
+
+/**
+ * @swagger
+ * /api/service-order/{id}:
  *   put:
  *     summary: Atualizar ordem de serviço
  *     tags: [ServiceOrder]
@@ -274,7 +307,7 @@ serviceOrderRouter.put(
 
 /**
  * @swagger
- * /serviceOrder/:
+ * /api/service-order/:
  *   post:
  *     summary: Cadastro de ordem de serviço
  *     tags: [ServiceOrder]
@@ -374,7 +407,7 @@ serviceOrderRouter.post(
 
 /**
  * @swagger
- * /serviceOrder/signature:
+ * /api/service-order/api/signature:
  *   post:
  *     summary: Anexo de assinatura do cliente na O.S.
  *     tags: [ServiceOrder]
