@@ -1,5 +1,5 @@
 import { bucketConfig } from "@config/bucket";
-import { bucketName, client, namespace, provider } from "@services/Bucket";
+import { bucketName, client, namespace } from "@services/Bucket";
 import { NextFunction, Request, Response } from "express";
 import multer, { FileFilterCallback } from "multer";
 

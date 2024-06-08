@@ -6,7 +6,7 @@ import { SendRecoverTokenRequestDTO } from "@modules/auth/dtos/sendRecoverToken/
 import { SendRecoverTokenResponseDTO } from "@modules/auth/dtos/sendRecoverToken/SendRecoverTokenResponseDTO";
 
 import { sendEmail } from "@services/Nodemailer";
-import { mailConfig } from "@services/Nodemailer/config";
+import { mailConfig } from "@config/nodemailer";
 import { generateRecoverTemplateWithData } from "@services/Nodemailer/templates/recoverMail";
 import { badRequest, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
