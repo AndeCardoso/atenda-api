@@ -14,7 +14,6 @@ export class UpdateEquipmentUseCase {
       const currentEquipment = await prisma.equipment.findFirst({
         where: {
           id,
-          customerId: data.customerId,
           companyId,
         },
       });
