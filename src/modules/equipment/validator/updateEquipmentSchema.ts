@@ -42,5 +42,4 @@ export const updateEquipmentSchema = checkSchema({
       errorMessage: "O número deve ser maior que zero",
     },
   },
-  customerId: {},
 });
