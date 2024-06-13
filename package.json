@@ -8,7 +8,7 @@
     "dev": "npx nodemon --exec 'ts-node -r tsconfig-paths/register' ./src/server.ts --watch",
     "db": "docker compose up -d",
     "update-migration": "npx prisma migrate dev --name",
-    "compile": "npx tsc && cp -R ./src/services/Nodemailer/templates/recoverMail/recover.ejs ./dist/services/Nodemailer/templates/recoverMail/",
+    "compile": "npx tsc && cp -R ./src/services/Nodemailer/templates/recoverMail/index.ejs ./dist/services/Nodemailer/templates/recoverMail/ && cp -R ./src/services/PDF/templates/customerReport/index.ejs ./dist/services/PDF/templates/customerReport/",
     "start": "node ./dist/server.js"
   },
   "_moduleAliases": {
