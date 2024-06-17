@@ -3,6 +3,7 @@ import { checkSchema } from "express-validator";
 import {
   equipmentColumnArray,
   equipmentFilterTypeArray,
+  equipmentSearchArray,
 } from "../constants/paramsType";
 
 export const getEquipmentListSchema = checkSchema({
@@ -64,9 +65,29 @@ export const getEquipmentListSchema = checkSchema({
       )}`,
     },
   },
+  searchType: {
+    optional: true,
+    isString: {
+      errorMessage: "Deve ser do tipo string",
+      bail: true,
+    },
+    isIn: {
+      options: [equipmentSearchArray],
+      errorMessage: `Termo de busca inválido, escolha entre os seguintes valores: ${equipmentSearchArray.reduce(
+        (ac: string, el: string) => (el ? `${ac}, ${el}` : `${ac}`)
+      )}`,
+    },
+  },
+  search: {
+    optional: true,
+    isString: {
+      errorMessage: "Deve ser do tipo string",
+      bail: true,
+    },
+  },
   customerId: {
-    notEmpty: true,
-    optional: false,
+    notEmpty: false,
+    optional: true,
     isInt: {
       errorMessage: "Deve ser um número inteiro",
       bail: true,

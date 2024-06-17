@@ -17,6 +17,10 @@ export const equipmentColumnArray = [
   "updated_at",
 ];
 
+export type TEquipmentSearchTypes = "nickname" | "customerName";
+
+export const equipmentSearchArray = ["nickname", "customerName"];
+
 export const equipmentFilterTypeArray = ["status"];
 
 export enum equipmentColumnTypesEnum {

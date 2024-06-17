@@ -17,41 +17,79 @@ export class GetEquipmentListUseCase {
     order = orderEnum.ASC,
     column = equipmentColumnTypesEnum.NICKNAME,
     search,
+    searchType,
     companyId,
     customerId,
   }: GetEquipmentListRequestDTO): Promise<
     HttpResponse<IPaginationResponse<EquipmentResponseDTO>>
   > {
-    const offset = (page - 1) * limit;
-
     try {
-      const equipments = await prisma.equipment.findMany({
-        select: {
-          id: true,
-          customerId: true,
-          nickname: true,
-          brand: true,
-          model: true,
-          description: true,
-          serialNumber: true,
-          voltage: true,
-          accessories: true,
-          color: true,
-          status: true,
-          updated_at: true,
-        },
-        where: {
-          customerId,
-          companyId,
-          nickname: {
-            mode: "insensitive",
-            contains: search,
+      const offset = (page - 1) * limit;
+
+      let equipments;
+      if (searchType === "customerName") {
+        equipments = await prisma.equipment.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            nickname: true,
+            brand: true,
+            model: true,
+            description: true,
+            serialNumber: true,
+            voltage: true,
+            accessories: true,
+            color: true,
+            status: true,
+            updated_at: true,
+            customer: {
+              select: {
+                name: true,
+              },
+            },
           },
-        },
-        orderBy: { [column]: order },
-        take: limit,
-        skip: offset,
-      });
+          where: {
+            companyId,
+            customer: {
+              name: {
+                mode: "insensitive",
+                contains: search,
+              },
+            },
+          },
+          orderBy: { [column]: order },
+          take: limit,
+          skip: offset,
+        });
+      } else {
+        equipments = await prisma.equipment.findMany({
+          select: {
+            id: true,
+            customerId: true,
+            nickname: true,
+            brand: true,
+            model: true,
+            description: true,
+            serialNumber: true,
+            voltage: true,
+            accessories: true,
+            color: true,
+            status: true,
+            updated_at: true,
+          },
+          where: {
+            customerId,
+            companyId,
+            nickname: {
+              mode: "insensitive",
+              contains: search,
+            },
+          },
+          orderBy: { [column]: order },
+          take: limit,
+          skip: offset,
+        });
+      }
 
       const totalEquipments = equipments.length;
 
