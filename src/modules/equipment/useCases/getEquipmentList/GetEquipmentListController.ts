@@ -15,7 +15,7 @@ export class GetEquipmentListController {
     const userPayload = req.headers.user as string;
     const { companyId } = JSON.parse(userPayload!!);
 
-    const { customerId, page, limit, order, column, search } =
+    const { customerId, page, limit, order, column, search, searchType } =
       req.query as unknown as GetEquipmentListRequestDTO;
 
     const getAllEquipmentsUseCase = new GetEquipmentListUseCase();
@@ -26,7 +26,8 @@ export class GetEquipmentListController {
         limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "nickname",
-        search: search,
+        searchType,
+        search,
         customerId: Number(customerId),
         companyId: Number(companyId),
       });
