@@ -15,7 +15,7 @@ export class GetTechnicianListController {
     const userPayload = req.headers.user as string;
     const { companyId } = JSON.parse(userPayload!!);
 
-    const { page, limit, order, column, search } =
+    const { page, limit, order, column, search, status } =
       req.query as IPaginationParams<TTechnicianColumnTypes>;
 
     const getAllTechniciansUseCase = new GetTechnicianListUseCase();
@@ -27,6 +27,7 @@ export class GetTechnicianListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
+        status: Number(status),
         companyId: Number(companyId),
       });
 

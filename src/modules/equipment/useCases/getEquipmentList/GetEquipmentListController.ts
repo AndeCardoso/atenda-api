@@ -15,8 +15,16 @@ export class GetEquipmentListController {
     const userPayload = req.headers.user as string;
     const { companyId } = JSON.parse(userPayload!!);
 
-    const { customerId, page, limit, order, column, search, searchType } =
-      req.query as unknown as GetEquipmentListRequestDTO;
+    const {
+      customerId,
+      page,
+      limit,
+      order,
+      column,
+      search,
+      searchType,
+      status,
+    } = req.query as unknown as GetEquipmentListRequestDTO;
 
     const getAllEquipmentsUseCase = new GetEquipmentListUseCase();
 
@@ -28,6 +36,7 @@ export class GetEquipmentListController {
         column: column || "nickname",
         searchType,
         search,
+        status: Number(status),
         customerId: Number(customerId),
         companyId: Number(companyId),
       });

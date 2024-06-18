@@ -20,6 +20,7 @@ export class GetCustomerListUseCase {
     order = orderEnum.ASC,
     column = customerColumnTypesEnum.NAME,
     search,
+    status,
     companyId,
   }: IPaginationParams<TCustomerColumnTypes>): Promise<
     HttpResponse<IPaginationResponse<CustomerResponseDTO>>
@@ -41,6 +42,7 @@ export class GetCustomerListUseCase {
         },
         where: {
           companyId,
+          ...(status && { status }),
           name: {
             mode: "insensitive",
             contains: search,

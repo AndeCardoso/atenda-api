@@ -17,6 +17,7 @@ export class GetServiceOrderListUseCase {
     order = orderEnum.ASC,
     column = serviceOrderColumnTypesEnum.ID,
     search,
+    status,
     customer,
     equipment,
     technician,
@@ -97,6 +98,7 @@ export class GetServiceOrderListUseCase {
         },
         where: {
           companyId,
+          ...(status && { status }),
           customerId: customer,
           equipmentId: equipment,
           technicianId: technician,

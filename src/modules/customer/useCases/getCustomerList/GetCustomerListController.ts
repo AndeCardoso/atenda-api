@@ -15,7 +15,7 @@ export class GetCustomerListController {
     const userPayload = req.headers.user as string;
     const { companyId } = JSON.parse(userPayload!!);
 
-    const { page, limit, order, column, search } =
+    const { page, limit, order, column, search, status } =
       req.query as IPaginationParams<TCustomerColumnTypes>;
 
     const getAllCustomersUseCase = new GetCustomerListUseCase();
@@ -26,7 +26,8 @@ export class GetCustomerListController {
         limit: limit ? Number(limit) : undefined,
         order: order || orderEnum.ASC,
         column: column || "name",
-        search: search,
+        search,
+        status: Number(status) ?? undefined,
         companyId: Number(companyId),
       });
 

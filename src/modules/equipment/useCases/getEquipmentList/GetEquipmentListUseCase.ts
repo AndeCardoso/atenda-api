@@ -18,6 +18,7 @@ export class GetEquipmentListUseCase {
     column = equipmentColumnTypesEnum.NICKNAME,
     search,
     searchType,
+    status,
     companyId,
     customerId,
   }: GetEquipmentListRequestDTO): Promise<
@@ -50,6 +51,7 @@ export class GetEquipmentListUseCase {
           },
           where: {
             companyId,
+            ...(status && { status }),
             customer: {
               name: {
                 mode: "insensitive",
