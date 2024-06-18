@@ -4,6 +4,7 @@ export interface IPaginationParams<T> extends Partial<ICompanyRequest> {
   order?: TOrderTypes;
   column?: T;
   search?: string;
+  status?: number;
 }
 
 export interface ICompanyRequest {

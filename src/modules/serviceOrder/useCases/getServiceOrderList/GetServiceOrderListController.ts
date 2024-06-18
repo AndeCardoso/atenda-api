@@ -24,6 +24,7 @@ export class GetServiceOrderListController {
       customer,
       equipment,
       technician,
+      status,
     } = req.query as IPaginationSOParams;
 
     const getAllServiceOrdersUseCase = new GetServiceOrderListUseCase();
@@ -35,6 +36,7 @@ export class GetServiceOrderListController {
         order: order || orderEnum.ASC,
         column: column || "id",
         search: search,
+        status: Number(status),
         companyId: Number(companyId),
         customer: customer ? Number(customer) : undefined,
         equipment: equipment ? Number(equipment) : undefined,

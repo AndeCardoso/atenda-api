@@ -3,6 +3,8 @@ import { prisma } from "@prismaClient/client";
 import { ServiceOrderResponseDTO } from "@modules/serviceOrder/dtos/ServiceOrderResponseDTO";
 import { HttpResponse } from "@shared/protocols/http";
 import { CreateServiceOrderDTO } from "@modules/serviceOrder/dtos/CreateServiceOrderDTO";
+import { equipmentsStatusBySoStatus } from "@modules/serviceOrder/constants";
+import { equipmentStatusEnum } from "@modules/equipment/constants";
 
 export class UpdateServiceOrderUseCase {
   async execute(
@@ -97,6 +99,16 @@ export class UpdateServiceOrderUseCase {
       return contentNotFound("Ordem de serviço");
     }
 
-    return ok(serviceOrder);
+    const equipment = await prisma.equipment.update({
+      where: { id: serviceOrder.equipment.id, companyId },
+      data: {
+        status:
+          equipmentsStatusBySoStatus[
+            data.status ?? equipmentStatusEnum.IN_LINE
+          ],
+      },
+    });
+
+    return ok({ ...serviceOrder, equipment });
   }
 }
