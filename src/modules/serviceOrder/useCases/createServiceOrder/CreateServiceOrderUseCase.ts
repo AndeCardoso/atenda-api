@@ -1,7 +1,10 @@
 import { prisma } from "@prismaClient/client";
 import { CreateServiceOrderDTO } from "@modules/serviceOrder/dtos/CreateServiceOrderDTO";
 import { ServiceOrderResponseDTO } from "@modules/serviceOrder/dtos/ServiceOrderResponseDTO";
-import { serviceOrderStatusEnum } from "@modules/serviceOrder/constants";
+import {
+  equipmentsStatusBySoStatus,
+  serviceOrderStatusEnum,
+} from "@modules/serviceOrder/constants";
 import {
   badRequest,
   contentNotFound,
@@ -18,7 +21,7 @@ export class CreateServiceOrderUseCase {
     orderedServices,
     executedServices,
     observations,
-    status,
+    status = serviceOrderStatusEnum.OPENED,
     signatureUrl,
     openedAt,
     closedAt,
@@ -116,26 +119,23 @@ export class CreateServiceOrderUseCase {
         return contentNotFound("Cliente");
       }
 
-      const equipment = await prisma.equipment.findUnique({
+      const currentEquipment = await prisma.equipment.findUnique({
         select: {
           id: true,
-          nickname: true,
-          brand: true,
-          model: true,
-          description: true,
-          serialNumber: true,
-          voltage: true,
-          accessories: true,
-          color: true,
-          status: true,
-          updated_at: true,
         },
         where: { companyId, id: equipmentId },
       });
 
-      if (!equipment) {
+      if (!currentEquipment) {
         return contentNotFound("Equipamento");
       }
+
+      const equipment = await prisma.equipment.update({
+        where: { id: equipmentId, companyId },
+        data: {
+          status: equipmentsStatusBySoStatus[status],
+        },
+      });
 
       const technician = await prisma.technician.findUnique({
         select: {
@@ -156,7 +156,7 @@ export class CreateServiceOrderUseCase {
 
       const newServiceOrder = await prisma.serviceOrder.create({
         data: {
-          status: status ?? serviceOrderStatusEnum.OPENED,
+          status,
           selectedVoltage,
           reportedDefect,
           foundDefect,
