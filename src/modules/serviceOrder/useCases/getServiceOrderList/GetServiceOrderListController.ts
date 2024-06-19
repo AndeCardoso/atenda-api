@@ -36,7 +36,7 @@ export class GetServiceOrderListController {
         order: order || orderEnum.ASC,
         column: column || "id",
         search: search,
-        status: Number(status),
+        status,
         companyId: Number(companyId),
         customer: customer ? Number(customer) : undefined,
         equipment: equipment ? Number(equipment) : undefined,

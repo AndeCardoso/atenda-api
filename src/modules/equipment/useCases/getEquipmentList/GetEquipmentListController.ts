@@ -36,7 +36,7 @@ export class GetEquipmentListController {
         column: column || "nickname",
         searchType,
         search,
-        status: Number(status),
+        status,
         customerId: Number(customerId),
         companyId: Number(companyId),
       });
