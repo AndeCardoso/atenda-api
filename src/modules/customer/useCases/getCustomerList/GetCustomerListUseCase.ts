@@ -12,6 +12,7 @@ import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { CustomerResponseDTO } from "@modules/customer/dtos/CustomerResponseDTO";
 import { address } from "@shared/types/address.type";
+import { convertStringToNumberArray } from "@utils/convertStringToNumberArray";
 
 export class GetCustomerListUseCase {
   async execute({
@@ -26,6 +27,8 @@ export class GetCustomerListUseCase {
     HttpResponse<IPaginationResponse<CustomerResponseDTO>>
   > {
     const offset = (page - 1) * limit;
+
+    const statusNumber = convertStringToNumberArray(status);
 
     try {
       const customers = await prisma.customer.findMany({
@@ -42,7 +45,12 @@ export class GetCustomerListUseCase {
         },
         where: {
           companyId,
-          ...(status && { status }),
+          ...(statusNumber &&
+            statusNumber.length > 0 && {
+              status: {
+                in: statusNumber,
+              },
+            }),
           name: {
             mode: "insensitive",
             contains: search,

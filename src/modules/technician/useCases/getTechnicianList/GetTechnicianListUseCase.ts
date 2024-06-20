@@ -11,6 +11,7 @@ import {
 import { TechnicianResponseDTO } from "@modules/technician/dtos/TechnicianResponseDTO";
 import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
+import { convertStringToNumberArray } from "@utils/convertStringToNumberArray";
 
 export class GetTechnicianListUseCase {
   async execute({
@@ -25,6 +26,8 @@ export class GetTechnicianListUseCase {
     HttpResponse<IPaginationResponse<TechnicianResponseDTO>>
   > {
     const offset = (page - 1) * limit;
+
+    const statusNumber = convertStringToNumberArray(status);
 
     try {
       const technicians = await prisma.technician.findMany({
@@ -50,7 +53,12 @@ export class GetTechnicianListUseCase {
         },
         where: {
           companyId,
-          ...(status && { status }),
+          ...(statusNumber &&
+            statusNumber.length > 0 && {
+              status: {
+                in: statusNumber,
+              },
+            }),
           name: {
             mode: "insensitive",
             contains: search,

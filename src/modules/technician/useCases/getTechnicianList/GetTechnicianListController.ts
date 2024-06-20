@@ -27,7 +27,7 @@ export class GetTechnicianListController {
         order: order || orderEnum.ASC,
         column: column || "name",
         search: search,
-        status: Number(status),
+        status,
         companyId: Number(companyId),
       });
 

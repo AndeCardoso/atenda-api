@@ -9,6 +9,7 @@ import { ServiceOrderResponseDTO } from "@modules/serviceOrder/dtos/ServiceOrder
 import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { IPaginationSOParams } from "@modules/serviceOrder/dtos/ServiceOrderListDTO";
+import { convertStringToNumberArray } from "@utils/convertStringToNumberArray";
 
 export class GetServiceOrderListUseCase {
   async execute({
@@ -26,6 +27,8 @@ export class GetServiceOrderListUseCase {
     HttpResponse<IPaginationResponse<ServiceOrderResponseDTO>>
   > {
     const offset = (page - 1) * limit;
+
+    const statusNumber = convertStringToNumberArray(status);
 
     try {
       const serviceOrders = await prisma.serviceOrder.findMany({
@@ -98,7 +101,12 @@ export class GetServiceOrderListUseCase {
         },
         where: {
           companyId,
-          ...(status && { status }),
+          ...(statusNumber &&
+            statusNumber.length > 0 && {
+              status: {
+                in: statusNumber,
+              },
+            }),
           customerId: customer,
           equipmentId: equipment,
           technicianId: technician,

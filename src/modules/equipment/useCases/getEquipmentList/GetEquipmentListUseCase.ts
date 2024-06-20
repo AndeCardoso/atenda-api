@@ -9,6 +9,7 @@ import { contentNotFound, ok, serverError } from "@helper/http/httpHelper";
 import { HttpResponse } from "@shared/protocols/http";
 import { EquipmentResponseDTO } from "@modules/equipment/dtos/EquipmentResponseDTO";
 import { GetEquipmentListRequestDTO } from "@modules/equipment/dtos/GetEquipmentListRequestDTO";
+import { convertStringToNumberArray } from "@utils/convertStringToNumberArray";
 
 export class GetEquipmentListUseCase {
   async execute({
@@ -27,71 +28,48 @@ export class GetEquipmentListUseCase {
     try {
       const offset = (page - 1) * limit;
 
-      let equipments;
-      if (searchType === "customerName") {
-        equipments = await prisma.equipment.findMany({
-          select: {
-            id: true,
-            customerId: true,
-            nickname: true,
-            brand: true,
-            model: true,
-            description: true,
-            serialNumber: true,
-            voltage: true,
-            accessories: true,
-            color: true,
-            status: true,
-            updated_at: true,
-            customer: {
-              select: {
-                name: true,
-              },
+      const statusNumber = convertStringToNumberArray(status);
+
+      const equipments = await prisma.equipment.findMany({
+        select: {
+          id: true,
+          customerId: true,
+          nickname: true,
+          brand: true,
+          model: true,
+          description: true,
+          serialNumber: true,
+          voltage: true,
+          accessories: true,
+          color: true,
+          status: true,
+          updated_at: true,
+          customer: {
+            select: {
+              name: true,
             },
           },
-          where: {
-            companyId,
-            ...(status && { status }),
-            customer: {
-              name: {
-                mode: "insensitive",
-                contains: search,
+        },
+        where: {
+          companyId,
+          ...(customerId && { customerId }),
+          ...(statusNumber &&
+            statusNumber.length > 0 && {
+              status: {
+                in: statusNumber,
               },
-            },
-          },
-          orderBy: { [column]: order },
-          take: limit,
-          skip: offset,
-        });
-      } else {
-        equipments = await prisma.equipment.findMany({
-          select: {
-            id: true,
-            customerId: true,
-            nickname: true,
-            brand: true,
-            model: true,
-            description: true,
-            serialNumber: true,
-            voltage: true,
-            accessories: true,
-            color: true,
-            status: true,
-            updated_at: true,
-          },
-          where: {
-            customerId,
-            companyId,
-            nickname: {
+            }),
+          customer: {
+            name: {
               mode: "insensitive",
               contains: search,
             },
           },
-          orderBy: { [column]: order },
-          take: limit,
-          skip: offset,
-        });
-      }
+        },
+        orderBy: { [column]: order },
+        take: limit,
+        skip: offset,
+      });
 
       const totalEquipments = equipments.length;
 
