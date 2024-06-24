@@ -26,17 +26,17 @@ export class EquipmentQueueUseCase {
         voltage: true,
         status: true,
         updated_at: true,
+        customer: {
+          select: {
+            name: true,
+          },
+        },
       },
       where: {
         companyId: company.id,
-        OR: [
-          {
-            status: equipmentStatusEnum.IN_LINE,
-          },
-          {
-            status: equipmentStatusEnum.ON_BENCH,
-          },
-        ],
+        status: {
+          in: [equipmentStatusEnum.IN_LINE, equipmentStatusEnum.ON_BENCH],
+        },
       },
       orderBy: { updated_at: "asc" },
       take: 10,
