@@ -1,8 +1,8 @@
-import dotenv from "dotenv";
+require("module-alias/register");
+import "dotenv/config";
 import { app } from "./app";
-dotenv.config();
 
-const port = 8888;
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Atenda is working at port: ${port}`);

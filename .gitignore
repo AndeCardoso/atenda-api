@@ -4,6 +4,9 @@
 # next.js
 /dist
 
+# public files
+/public
+
 # misc
 .DS_Store
 *.pem
